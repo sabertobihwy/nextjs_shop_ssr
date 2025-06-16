@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @layer components{
-  .container {
-    @apply mx-auto w-4/5 px-10;
+  .containerM {
+    @apply mx-auto w-1/2 px-10;
   }
 }
 
