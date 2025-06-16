@@ -1,9 +1,8 @@
-import { Sort } from "@/components/Sort";
+import { getProducts } from "./action"
+import PageClient from "./pageClient"
 
-export default async function page() {
-    return (
-        <div className="containerContent flex justify-between items-center">
-            <Sort />
-        </div>
-    )
+
+export default async function Page() {
+    const productInitialS = await getProducts()
+    return <PageClient productInitialS={productInitialS} />
 }
