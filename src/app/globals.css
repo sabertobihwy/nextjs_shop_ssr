@@ -4,6 +4,9 @@
   .containerM {
     @apply mx-auto w-1/2 px-10;
   }
+  .containerContent {
+    @apply mx-auto w-2/3 px-10;
+  }
 }
 
 /* 

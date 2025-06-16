@@ -1,8 +1,9 @@
+import { Sort } from "@/components/Sort";
 
-export default function page() {
+export default async function page() {
     return (
-        <div>
-            12
+        <div className="containerContent flex justify-between items-center">
+            <Sort />
         </div>
     )
 }

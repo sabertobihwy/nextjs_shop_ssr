@@ -1,3 +1,4 @@
+
 export const HEADERLINK = [
     { href: '/search', name: 'Search' },
     { href: '/account', name: 'Account' },
@@ -30,3 +31,9 @@ export const FOOTERLINK = [
         ]
     }
 ]
+
+export const SORTLIST = [
+    { href: '/latest', name: 'Latest Arrivals', valueName: 'latest' },
+    { href: '/low', name: 'Price Low - High', valueName: 'low' },
+    { href: '/high', name: 'Price High - Low', valueName: 'high' }
+] as const
