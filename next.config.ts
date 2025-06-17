@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-};
+  images: {
+    domains: ['duyi-resource.oss-cn-beijing.aliyuncs.com'],
+  },
+}
 
 export default nextConfig;

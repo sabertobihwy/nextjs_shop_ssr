@@ -21,12 +21,14 @@ const sortMapping = {
 }
 export async function getProducts(sortTag: SortValue = "latest"): Promise<ProductState> {
     const { colName, orderBy } = sortMapping[sortTag]
-    const result = await sql.query(`SELECT * FROM products ORDER BY ${colName} ${orderBy}`) as unknown as Product[]
+    const result = (await sql.query(`SELECT * FROM products ORDER BY ${colName} ${orderBy}`)) as unknown as Product[]
     return {
         product: result
     }
 }
 export async function getProductsAction(_: ProductState, formData: FormData) {
+    console.log('======')
+    console.log(formData)
     const sortTag = formData.get('sortTag') as SortValue
     return getProducts(sortTag)
 }

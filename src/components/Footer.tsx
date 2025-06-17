@@ -7,7 +7,7 @@ export async function Footer() {
     return (
         <div className="border-t mt-6">
             <div className="containerM py-32 flex justify-between items-center">
-                <div className="text-2xl">
+                <div className="text-2xl font-bold">
                     <h2>SHOP</h2>
                 </div>
                 <div className="flex space-x-10 h-35">

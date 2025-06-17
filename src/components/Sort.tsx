@@ -20,9 +20,13 @@ export function Sort({ action }: { action: () => void }) {
                     if (value) setValue(value);
                 }}
                 className="flex flex-col items-start mt-6 gap-3 ml-10">
-                {SORTLIST.map((item, i) => (<ToggleGroupItem key={i} value={item.valueName} className="rounded-md" variant="default">
-                    <button className="text-xl" type="submit" name="sortTag" value={item.valueName}>{item.name}</button>
+
+                {SORTLIST.map((item, i) => (<ToggleGroupItem key={i} value={item.valueName} className="rounded-md text-xl"
+                    type="submit" name="sortTag"
+                >{item.name}
+                    {/* <button className="text-xl" type="submit" name="sortTag" value={item.valueName}>{item.name}</button> */}
                 </ToggleGroupItem>))}
+
             </ToggleGroup>
         </form>
     </div>)

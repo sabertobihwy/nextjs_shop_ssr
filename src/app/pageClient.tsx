@@ -12,7 +12,7 @@ export default function PageClient({ productInitialS }: { productInitialS: Produ
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [state, action, isPending] = useActionState<ProductState>(getProductsAction as unknown as any, productInitialS)
     return (
-        <div className="containerContent flex justify-between items-center">
+        <div className="containerContent flex justify-between">
             <Sort action={action} />
             <Products list={state.product} isPending={isPending} />
         </div>
