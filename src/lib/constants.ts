@@ -1,3 +1,7 @@
+export enum Status {
+    SUCCESS = 'success',
+    ERROR = 'error'
+}
 
 export const HEADERLINK = [
     { href: '/search', name: 'Search' },
