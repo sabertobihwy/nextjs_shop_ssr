@@ -3,7 +3,6 @@
 
 import { sql } from '@/lib/db'
 import { ActionRespType, Product, SortValue } from '@/lib/type'
-import { ProductState } from '../app/pageClient'
 import { Status } from '@/lib/constants'
 
 const sortMapping = {
