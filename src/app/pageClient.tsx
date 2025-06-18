@@ -1,4 +1,4 @@
-'use client'
+"use client"
 import { Sort } from "@/components/Sort";
 import { Product } from "@/lib/type";
 import { Products } from "@/components/Products";
