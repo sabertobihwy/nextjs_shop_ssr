@@ -15,7 +15,8 @@ export default async function Loading() {
                 <h2 className='text-4xl mb-8'>Products</h2>
                 <div className="grid grid-cols-3 gap-10">
                     {Array(10).fill(1).map((_, i) =>
-                    (<div key={i} className="bg-slate-50 p-4 rounded-lg shadow-md hover:bg-slate-200 flex flex-col ">
+                    (<div key={i} className="bg-slate-50 p-4 rounded-lg shadow-md hover:bg-slate-200 flex flex-col 
+                    transition duration-300 ease-in-out ">
                         <div className="relative w-full aspect-[1/1] overflow-hidden">
                             <Skeleton className='absolute inset-0 w-full h-full' />
                         </div>

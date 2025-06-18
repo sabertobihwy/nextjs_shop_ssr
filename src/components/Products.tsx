@@ -18,7 +18,7 @@ export function Products({ list }: { list: Product[] }) {
                 <div key={item.id} className="bg-slate-50 p-4 rounded-lg shadow-md hover:bg-slate-200 
                 transition duration-300 ease-in-out cursor-pointer flex flex-col ">
                     <div className="relative w-full aspect-[1/1] overflow-hidden">
-                        <Image src={item.image} alt={item.name} fill priority className='object-contain self-center' />
+                        <Image src={item.image} alt={item.name} sizes='180' fill priority className='object-contain self-center' />
                     </div>
                     <div className='flex items-center justify-between mt-4'>
                         <p className='text-xl text-slate-700'>{item.name}</p>
