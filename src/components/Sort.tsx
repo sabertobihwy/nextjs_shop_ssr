@@ -1,4 +1,4 @@
-'use client'
+"use client"
 import {
     ToggleGroup,
     ToggleGroupItem,
@@ -8,8 +8,8 @@ import { SortValue } from "@/lib/type";
 import { useSortStore } from "@/store";
 
 export function Sort() {
-    const { sortTag, setSort } = useSortStore()
-
+    const setSort = useSortStore(state => state.setSort)
+    const sortTag = useSortStore(state => state.sortTag)
     return (<div className="w-64 py-6">
         <h2 className="text-2xl">Sort by</h2>
         <ToggleGroup type="single"

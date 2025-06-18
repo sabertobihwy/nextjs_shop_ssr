@@ -1,5 +1,7 @@
+"use client"
 import { SortValue } from '@/lib/type'
-import { create } from 'zustand'
+import { useStore } from 'zustand'
+import { createStore } from 'zustand/vanilla'
 
 type SortStoreState = {
     sortTag: SortValue
@@ -9,9 +11,15 @@ type SortAction = {
     setSort: (value: SortStoreState['sortTag']) => void
 }
 
-const useSortStore = create<SortStoreState & SortAction>()((set) => ({
+type SortStore = SortStoreState & SortAction
+
+
+const sortStore = createStore<SortStore>()((set) => ({
     sortTag: 'latest',
-    setSort: (newValue) => set({ sortTag: newValue })
+    setSort: (tag) => set({ sortTag: tag }),
 }))
+
+
+const useSortStore = <T>(selectorFn: (state: SortStoreState & SortAction) => T) => useStore(sortStore, selectorFn)
 
 export default useSortStore

@@ -5,7 +5,7 @@ import { useSortStore } from '@/store'
 import { useMemo } from 'react'
 
 export function Products({ list }: { list: Product[] }) {
-    const { sortTag } = useSortStore()
+    const sortTag = useSortStore(state => state.sortTag)
     const listResult = useMemo(() => {
         const listCopy = [...list]
         return listCopy.sort((a: Product, b: Product) => sortTag === 'latest' ? b.id - a.id : sortTag === 'low' ? a.price - b.price : b.price - a.price)
@@ -14,14 +14,18 @@ export function Products({ list }: { list: Product[] }) {
         <h2 className='text-4xl mb-8'>Products</h2>
         <div className="grid grid-cols-3 gap-10">
             {listResult.map((item) =>
-            (<div key={item.id} className="bg-slate-50 p-4 rounded-lg shadow-md hover:bg-slate-200 
+            (
+                <div key={item.id} className="bg-slate-50 p-4 rounded-lg shadow-md hover:bg-slate-200 
                 transition duration-300 ease-in-out cursor-pointer flex flex-col ">
-                <Image src={item.image} alt={item.name} width={180} height={180} priority className='self-center' />
-                <div className='flex items-center justify-between mt-4'>
-                    <p className='text-xl text-slate-700'>{item.name}</p>
-                    <p className='font-bold text-red-400'>${item.price}</p>
+                    <div className="relative w-full aspect-[1/1] overflow-hidden">
+                        <Image src={item.image} alt={item.name} fill priority className='object-contain self-center' />
+                    </div>
+                    <div className='flex items-center justify-between mt-4'>
+                        <p className='text-xl text-slate-700'>{item.name}</p>
+                        <p className='font-bold text-red-400'>${item.price}</p>
+                    </div>
                 </div>
-            </div>))}
+            ))}
         </div>
     </div>)
 }
