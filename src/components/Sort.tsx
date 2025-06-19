@@ -20,7 +20,7 @@ export function Sort() {
             }}
             className="flex flex-col items-start mt-6 gap-3 ml-10">
 
-            {SORTLIST.map((item, i) => (<ToggleGroupItem key={i} value={item.valueName} className="rounded-md text-xl"
+            {SORTLIST.map((item) => (<ToggleGroupItem key={item.valueName} value={item.valueName} className="rounded-md text-xl"
             >{item.name}
             </ToggleGroupItem>))}
 

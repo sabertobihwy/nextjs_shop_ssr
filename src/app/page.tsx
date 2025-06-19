@@ -12,5 +12,6 @@ export default async function Page() {
     if (productState.status === Status.ERROR) {
         return <>{productState.message}</>;
     }
+    // console.log(JSON.stringify(productState.data))
     return <PageClient products={productState.data} />
 }

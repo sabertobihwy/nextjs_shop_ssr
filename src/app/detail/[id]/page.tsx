@@ -10,5 +10,6 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         return <>{productState.message}</>;
     }
     const detail = productState.data[0]
+    await new Promise(resolve => setTimeout(resolve, 3000))
     return (<PageClient detail={detail} />)
 }

@@ -11,9 +11,9 @@ const toggleVariants = cva(
   {
     variants: {
       variant: {
-        default: "p-1 bg-white text-black hover:bg-orange-200 hover:text-orange-50",
+        default: "p-1 bg-white text-black hover:bg-orange-200 hover:text-orange-50 hover:cursor-pointer",
         outline:
-          "border border-input bg-orange-500 shadow-xs hover:bg-orange-200 text-white",
+          "border border-input text-black bg-slate-100 shadow-xs hover:bg-orange-200 rounded-none",
       },
       size: {
         default: "h-9 px-2 min-w-9",
