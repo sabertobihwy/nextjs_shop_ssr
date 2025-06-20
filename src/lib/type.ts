@@ -9,6 +9,17 @@ export type Product = {
     image: string,
     variant: string[]
 }
+
+export type CartProduct = {
+    id: number,
+    name: string,
+    price: number,
+    image: string,
+    variant: string,
+    quantity: number,
+    totalPrice: number
+}
+
 export type ActionRespType<T> =
     | {
         status: Status.SUCCESS

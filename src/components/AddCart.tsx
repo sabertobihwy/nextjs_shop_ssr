@@ -1,18 +1,31 @@
 "use client"
 
-import { Product } from "@/lib/type";
+import { CartProduct, Product } from "@/lib/type";
 import { useCallback, useState } from "react";
 import {
     ToggleGroup,
     ToggleGroupItem,
 } from "@/components/ui/toggle-group"
 import { Button } from "@/components/ui/button"
+import { useCartStore } from "@/store";
 
 export default function AddCart({ product }: { product: Product }) {
     const [value, setValue] = useState<string | null>(() => null)
     const handleClick = useCallback((value: string) => {
         setValue(value)
     }, [setValue])
+    const addItem = useCartStore(state => state.addItem)
+    const addToCart = useCallback(() => {
+        const cartItem: Omit<CartProduct, 'quantity' | 'totalPrice'> = {
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            image: product.image,
+            variant: value!
+        }
+        addItem(cartItem)
+    }, [product, value, addItem])
+
     return (<div className="w-full px-6 flex flex-col items-center">
         <h1 className="text-3xl py-6 self-start">Select</h1>
         <ToggleGroup type="single"
@@ -30,7 +43,9 @@ export default function AddCart({ product }: { product: Product }) {
             <span className="text-2xl px-4">Price</span>
             <span className="text-red-500 font-bold text-2xl">${product.price}</span>
         </div>
-        <Button className="h-10 w-[150px] text-2xl py-6 bg-orange-400 text-white hover:cursor-pointer" variant="outline" disabled={value ? false : true}>Add to Cart</Button>
+        <Button className="h-10 w-[150px] text-2xl py-6 bg-orange-400 text-white hover:cursor-pointer"
+            onClick={addToCart}
+            variant="outline" disabled={value ? false : true}>Add to Cart</Button>
     </div>)
 
 }

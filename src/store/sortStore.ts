@@ -1,7 +1,5 @@
-"use client"
 import { SortValue } from '@/lib/type'
-import { useStore } from 'zustand'
-import { createStore, StoreApi } from 'zustand/vanilla'
+import { create } from 'zustand'
 
 type SortStoreState = {
     sortTag: SortValue
@@ -13,25 +11,10 @@ type SortAction = {
 
 type SortStore = SortStoreState & SortAction
 
-let _store: StoreApi<SortStore> | null = null
+const useSortStore = create<SortStore>()((set) => ({
+    sortTag: 'latest',
+    setSort: (tag) => set({ sortTag: tag }),
+}))
 
-function initSortStore() {
-    return createStore<SortStore>((set) => ({
-        sortTag: 'latest',
-        setSort: (tag) => set({ sortTag: tag }),
-    }))
-}
-
-function getStore(): StoreApi<SortStore> {
-    if (!_store) {
-        _store = initSortStore()
-    }
-    return _store
-}
-
-function useSortStore<T>(selector: (state: SortStore) => T) {
-    const store = getStore()
-    return useStore(store, selector)
-}
 
 export default useSortStore
