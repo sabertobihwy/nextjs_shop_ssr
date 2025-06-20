@@ -3,12 +3,14 @@ import { create } from "zustand";
 
 type CartStore = {
     items: Record<string, CartProduct[]>; // 用 productId 做 key，便于快速查找 & 更新
+    totalPrice: number;
     addItem: (item: Omit<CartProduct, "quantity" | "totalPrice">) => void;
     setQuantity: (productId: string, variant: string, quantity: number) => void;
     removeItem: (productId: string, variant: string) => void;
 };
 
 export const useCartStore = create<CartStore>((set) => ({
+    totalPrice: 0,
     items: {},
     addItem: (item) =>
         set((state) => {
@@ -45,6 +47,7 @@ export const useCartStore = create<CartStore>((set) => ({
                     ...state.items,
                     [item.id]: newList,
                 },
+                totalPrice: state.totalPrice + item.price
             };
         }),
 
@@ -56,17 +59,25 @@ export const useCartStore = create<CartStore>((set) => ({
                     { ...item, quantity, totalPrice: item.price * quantity }
                     : item
             );
+            const newItems = {
+                ...state.items,
+                [productId]: updatedList,
+            };
+            // Todo: performance optimization, not set Quantity, just do munis and plus
+            const totalPrice = Object.values(newItems).flat().reduce((acc, item) =>
+                (acc + item.quantity * item.price), 0)
+
             return {
-                items: {
-                    ...state.items,
-                    [productId]: updatedList,
-                },
+                items: newItems,
+                totalPrice
             };
         }),
 
     removeItem: (productId, variant) =>
         set((state) => {
             const list = state.items[productId] || [];
+            const toRemoveItem = list.find((item) => item.variant === variant);
+            const itemTotalPrice = toRemoveItem!.price * toRemoveItem!.quantity
             const updatedList = list.filter((item) => item.variant !== variant);
             const newItems = { ...state.items };
 
@@ -76,7 +87,7 @@ export const useCartStore = create<CartStore>((set) => ({
                 newItems[productId] = updatedList;
             }
 
-            return { items: newItems };
+            return { items: newItems, totalPrice: state.totalPrice - itemTotalPrice };
         }),
 }));
 
