@@ -13,13 +13,13 @@ export default function AddCart({ product }: { product: Product }) {
     const handleClick = useCallback((value: string) => {
         setValue(value)
     }, [setValue])
-    return (<div className="w-full flex flex-col items-center">
+    return (<div className="w-full px-6 flex flex-col items-center">
         <h1 className="text-3xl py-6 self-start">Select</h1>
         <ToggleGroup type="single"
             variant="outline"
             size='lg'
             onValueChange={handleClick}
-            className="justify-start border-b mt-3 gap-6 ml-5 pb-6">
+            className="justify-start border-b mt-3 gap-6 ml-5 p-6">
 
             {product.variant.map((item, i) =>
             (<ToggleGroupItem key={i} value={item}
