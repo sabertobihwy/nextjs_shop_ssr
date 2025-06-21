@@ -3,13 +3,14 @@ import { Separator } from "@/components/ui/separator"
 import { HEADERLINK, HeaderLinkItem } from "@/lib/constants"
 import React from "react"
 import DefaultNavLink from "./DefaultNavLink"
+import Link from "next/link"
 
 export async function Header() {
     return (
         <div className="h-16 border-black/20 border-b bg-white">
             <div className="containerM flex items-center justify-between h-full">
                 <h1 className="text-2xl font-bold">
-                    SHOP
+                    <Link href={'/'}>SHOP</Link>
                 </h1>
                 <div className="flex justify-end space-x-4 text-sm h-1/3">
                     {

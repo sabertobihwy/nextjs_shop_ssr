@@ -8,6 +8,9 @@ import {
 } from "@/components/ui/toggle-group"
 import { Button } from "@/components/ui/button"
 import { useCartStore } from "@/store";
+import { Toaster } from "@/components/ui/sonner"
+import { toast } from "sonner"
+
 
 export default function AddCart({ product }: { product: Product }) {
     const [value, setValue] = useState<string | null>(() => null)
@@ -24,6 +27,8 @@ export default function AddCart({ product }: { product: Product }) {
             variant: value!
         }
         addItem(cartItem)
+        toast("successfully added into your cart ✔")
+
     }, [product, value, addItem])
 
     return (<div className="w-full px-6 flex flex-col items-center">
@@ -45,7 +50,9 @@ export default function AddCart({ product }: { product: Product }) {
         </div>
         <Button className="h-10 w-[150px] text-2xl py-6 bg-orange-400 text-white hover:cursor-pointer"
             onClick={addToCart}
-            variant="outline" disabled={value ? false : true}>Add to Cart</Button>
+            variant="outline" disabled={value ? false : true}
+        >Add to Cart</Button>
+        <Toaster />
     </div>)
 
 }
