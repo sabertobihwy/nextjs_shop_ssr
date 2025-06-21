@@ -10,7 +10,7 @@ export async function Header() {
         <div className="h-16 border-black/20 border-b bg-white">
             <div className="containerM flex items-center justify-between h-full">
                 <h1 className="text-2xl font-bold hover:cursor-pointer">
-                    <Link href={'/'}>SHOP</Link>
+                    <Link href={'/'}>SHOPSTACK</Link>
                 </h1>
                 <div className="flex justify-end space-x-4 text-sm h-1/3">
                     {
