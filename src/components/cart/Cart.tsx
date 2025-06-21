@@ -21,11 +21,11 @@ export default function Cart() {
             <div className="w-full">
                 <Table>
                     <TableHeader>
-                        <TableRow className="text-base">
+                        <TableRow className="text-base hover:bg-transparent">
                             <TableHead className="w-3/5 text-gray-500 font-normal">Item</TableHead>
-                            <TableHead className="text-gray-500 font-normal">Quantity</TableHead>
-                            <TableHead className="text-gray-500 font-normal">Price</TableHead>
-                            <TableHead className="text-right text-gray-500 font-normal">Total</TableHead>
+                            <TableHead className="w-[100px] text-gray-500 font-normal">Quantity</TableHead>
+                            <TableHead className="w-[100px] text-gray-500 font-normal">Price</TableHead>
+                            <TableHead className="w-[100px] text-right text-gray-500 font-normal">Total</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>

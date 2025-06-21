@@ -1,6 +1,6 @@
 "use client"
 
-import AddCart from "@/components/AddCart";
+import AddCart from "@/components/cart/AddCart";
 import { Product } from "@/lib/type";
 import Image from 'next/image'
 

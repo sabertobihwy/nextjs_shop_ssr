@@ -1,5 +1,5 @@
 "use client"
-import Cart from "@/components/Cart";
+import Cart from "@/components/cart/Cart";
 import { useCartStore } from "@/store";
 
 export default function Page() {

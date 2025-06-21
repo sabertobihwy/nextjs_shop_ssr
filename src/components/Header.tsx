@@ -1,8 +1,8 @@
 
-import Link from "next/link"
 import { Separator } from "@/components/ui/separator"
-import { HEADERLINK } from "@/lib/constants"
+import { HEADERLINK, HeaderLinkItem } from "@/lib/constants"
 import React from "react"
+import DefaultNavLink from "./DefaultNavLink"
 
 export async function Header() {
     return (
@@ -13,9 +13,10 @@ export async function Header() {
                 </h1>
                 <div className="flex justify-end space-x-4 text-sm h-1/3">
                     {
-                        HEADERLINK.map((item, i) => <React.Fragment key={i}>
+                        HEADERLINK.map((link: HeaderLinkItem, i) => <React.Fragment key={i}>
                             {i !== 0 && <Separator orientation='vertical' />}
-                            <Link href={item.href} className="text-lg">{item.name}</Link>
+                            {link.render ? (React.cloneElement(link.render))
+                                : <DefaultNavLink {...link} />}
                         </React.Fragment>)
                     }
                     {/* <Link href='/search'>Search</Link>

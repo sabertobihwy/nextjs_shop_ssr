@@ -1,13 +1,26 @@
+import { Search } from 'lucide-react';
+import type { ReactNode, ReactElement } from "react";
+import { CircleUserRound } from 'lucide-react';
+import CustomCartLink from '@/components/CustomCartLink';
+
+export type HeaderLinkItem = {
+    href: string;
+    name: string;
+    icon?: ReactNode;
+    render?: ReactElement<{ href: string; name: string }>; // 若存在，则跳过默认渲染
+};
+
+export const HEADERLINK: HeaderLinkItem[] = [
+    { href: '/search', name: 'Search', icon: <Search /> },
+    { href: '/account', name: 'Account', icon: <CircleUserRound /> },
+    { href: '/cart', name: 'Cart', render: <CustomCartLink href="/cart" name="Cart" />, },
+]
+
 export enum Status {
     SUCCESS = 'success',
     ERROR = 'error'
 }
 
-export const HEADERLINK = [
-    { href: '/search', name: 'Search' },
-    { href: '/account', name: 'Account' },
-    { href: '/cart', name: 'Cart' },
-]
 export const FOOTERLINK = [
     {
         category: 'category1',
