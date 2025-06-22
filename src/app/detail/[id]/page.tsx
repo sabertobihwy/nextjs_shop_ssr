@@ -1,8 +1,9 @@
 import { getProductDetail } from "@/action/action"
 import { Status } from "@/lib/constants";
-import { ActionRespType, Product } from "@/lib/type"
+import { ActionRespType } from "@/lib/type"
 import PageClient from "./pageClient";
-import { sql } from "@/lib/db";
+import { prisma } from '@/lib/prisma'
+import { ProductAdapter, ProductDTO } from "@/domain/products";
 
 export async function generateStaticParams() {
     try {
@@ -14,19 +15,25 @@ export async function generateStaticParams() {
     }
 }
 // internal call
-async function fetchAllProducts(): Promise<Product[]> {
-    const result = (await sql.query(`SELECT * FROM products`)) as unknown as Product[]
+async function fetchAllProducts(): Promise<{
+    name: string;
+    id: number;
+    desc: string;
+}[]> {
+    const result = await prisma.products.findMany()
     if (!result || result.length === 0) throw new Error('No products found')
     return result
 }
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
-    const productState: ActionRespType<Product> = await getProductDetail(Number(id))
+    const productState: ActionRespType<ProductDTO> = await getProductDetail(Number(id))
     if (productState.status === Status.ERROR) {
         return <>{productState.message}</>;
     }
-    const detail = productState.data[0]
-    // await new Promise(resolve => setTimeout(resolve, 3000))
-    return (<PageClient detail={detail} />)
+    const [detail] = productState.data
+    // do the convertion to VO
+    const adapter = new ProductAdapter(detail)
+    const productDetailVO = adapter.toProductDetailVO()
+    return (<PageClient detail={productDetailVO} />)
 }

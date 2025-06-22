@@ -31,14 +31,19 @@ export async function getProducts(): Promise<ActionRespType<Product>> {
     }
 }
 
-export async function getProductDetail(id: number): Promise<ActionRespType<Product>> {
+export async function getProductDetail(id: number): Promise<ActionRespType<ProductDTO>> {
     try {
         // const result = (await sql.query(`SELECT * FROM products WHERE id = $1`, [id])) as unknown as Product[]
-        const product = await prisma.products.findUnique({
+        const result = await prisma.products.findUnique({
             where: { id },
             include: { variants: true }
         })
-        const result: Product = adaptorTmp(product!)
+        // const result: Product = adaptorTmp(product!)
+        if (!result) return {
+            status: Status.ERROR,
+            code: 404,
+            message: "没有查到商品"
+        }
         return {
             status: Status.SUCCESS,
             code: 200,
