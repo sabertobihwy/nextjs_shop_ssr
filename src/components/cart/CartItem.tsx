@@ -15,7 +15,7 @@ export default function CartItem({ item }: { item: CartProduct }) {
             <TableCell className="font-medium">
                 <div className="flex">
                     <div className="w-[100px] aspect-[1/1] border relative">
-                        <Image src={item.image} alt={item.name} fill className='object-cover' />
+                        <Image src={item.image} alt={item.name} fill className='object-contain' />
                     </div>
                     <div className="flex flex-col justify-center ">
                         <span className="p-2 ml-4 text-lg">{item.name}</span>

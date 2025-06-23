@@ -49,7 +49,7 @@ export default function AddCart({ product, onClickVariantHandler }: { product: P
 
             {product.imgList.map((item, i) =>
             (<ToggleGroupItem key={i} value={item.type}
-                className="text-xl rounded-none first:rounded-l-none last:rounded-r-none">{item.type}
+                className="text-xl rounded-none first:rounded-l-none last:rounded-r-none px-4">{item.type}
             </ToggleGroupItem>))}
         </ToggleGroup>
         <div className="py-10 flex justify-between">
