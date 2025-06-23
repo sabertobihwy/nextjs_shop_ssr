@@ -3,7 +3,7 @@ import { Status } from "@/lib/constants";
 import { ActionRespType } from "@/lib/type"
 import PageClient from "./pageClient";
 import { prisma } from '@/lib/prisma'
-import { ProductAdapter, ProductDTO } from "@/domain/products";
+import { ProductDetailAdaptor, ProductDTO } from "@/domain/products";
 
 export async function generateStaticParams() {
     try {
@@ -33,7 +33,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     }
     const [detail] = productState.data
     // do the convertion to VO
-    const adapter = new ProductAdapter(detail)
+    const adapter = new ProductDetailAdaptor(detail)
     const productDetailVO = adapter.toProductDetailVO()
     return (<PageClient detail={productDetailVO} />)
 }

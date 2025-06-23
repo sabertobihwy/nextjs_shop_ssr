@@ -2,20 +2,20 @@
 'use server'
 import { prisma } from '@/lib/prisma'
 //import { sql } from '@/lib/db'
-import { ActionRespType, Product } from '@/lib/type'
+import { ActionRespType } from '@/lib/type'
 import { Status } from '@/lib/constants'
-import { adaptorTmp, ProductDTO } from '@/domain/products'
+import { ProductDTO } from '@/domain/products'
 
 
-export async function getProducts(): Promise<ActionRespType<Product>> {
+export async function getProducts(): Promise<ActionRespType<ProductDTO>> {
     try {
         //const result = (await sql.query(`SELECT * FROM products`)) as unknown as Product[]
-        const productsWithVariants: ProductDTO[] = await prisma.products.findMany({
+        const result: ProductDTO[] = await prisma.products.findMany({
             include: {
                 variants: true
             }
         })
-        const result = adaptorTmp(productsWithVariants)
+        // const result = adaptorTmp(productsWithVariants)
         return {
             status: Status.SUCCESS,
             code: 200,
