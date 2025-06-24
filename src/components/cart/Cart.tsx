@@ -23,8 +23,8 @@ export default function Cart() {
                     <TableHeader>
                         <TableRow className="text-base hover:bg-transparent">
                             <TableHead className="w-3/5 text-gray-500 font-normal">Item</TableHead>
-                            <TableHead className="w-[100px] text-gray-500 font-normal">Quantity</TableHead>
-                            <TableHead className="w-[100px] text-gray-500 font-normal">Price</TableHead>
+                            <TableHead className="w-[200px] text-gray-500 font-normal text-left">Quantity</TableHead>
+                            <TableHead className="w-[100px] text-gray-500 font-normal ">Price</TableHead>
                             <TableHead className="w-[100px] text-right text-gray-500 font-normal">Total</TableHead>
                         </TableRow>
                     </TableHeader>

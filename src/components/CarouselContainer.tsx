@@ -25,10 +25,6 @@ export const CarouselContainer = React.forwardRef<CarouselHandle, CarouselProps>
             apiRef.current?.scrollTo(index)
         },
     }))
-    // const imgList = [{ url: 'https://duyi-resource.oss-cn-beijing.aliyuncs.com/dupeng/1734699799829-3707c90c-ae03-4352-92ba-086391c0ca26.webp', type: 'red' },
-    // { url: 'https://duyi-resource.oss-cn-beijing.aliyuncs.com/dupeng/1734699832491-18cc3117-cdd8-4801-9fd2-cc044e3e7f89.webp', type: 'red' },
-    // { url: 'https://duyi-resource.oss-cn-beijing.aliyuncs.com/dupeng/1734699844911-0fcb80a5-fe52-4253-8a12-ad05cb543ef9.webp', type: 'red' }
-    // ]
     return (
         <Carousel setApi={(api) => (apiRef.current = api)} className="w-full">
             <CarouselContent>

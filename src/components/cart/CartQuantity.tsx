@@ -2,32 +2,42 @@
 
 import { useCartStore } from "@/store"
 import { Trash2 } from 'lucide-react';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
+import { CirclePlus, CircleMinus } from 'lucide-react';
+import { Input } from "@/components/ui/input"
+import { useMemo } from "react";
+
+function useCartItemActions(id: string, variant: string) {
+    const plusQuantity = useCartStore(s => s.plusQuantity);
+    const minusQuantity = useCartStore(s => s.minusQuantity);
+    const removeItem = useCartStore(s => s.removeItem);
+
+    return {
+        onPlus: () => plusQuantity(id, variant),
+        onMinus: () => minusQuantity(id, variant),
+        onRemove: () => removeItem(id, variant),
+    };
+}
+
 
 export default function CartQuantity({ id, variant }: { id: string, variant: string }) {
     const items = useCartStore(state => state.items)
-    const setQuantity = useCartStore(state => state.setQuantity)
-    const removeItem = useCartStore(state => state.removeItem)
-    const quantityList = Array.from({ length: 10 }, (_, i) => i + 1)
-    const index = items[id].findIndex(item => item.variant === variant)
-    const item = items[id][index]
-    return (<div className="flex items-center">
-        <Trash2 className="mr-2" onClick={() => removeItem(id, variant)} />
-        <Select defaultValue={item.quantity.toString()} onValueChange={(val) => setQuantity(id, variant, parseInt(val))}>
-            <SelectTrigger className="w-[80px]">
-                <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-                {quantityList.map(n =>
-                    (<SelectItem key={n} value={n.toString()}>{n.toString()}</SelectItem>))}
-            </SelectContent>
-        </Select>
-    </div>)
+    const item = useMemo(() => items[id]?.find(i => i.variant === variant), [items, id, variant]);
+    const { onPlus, onMinus, onRemove } = useCartItemActions(id, variant);
+
+    if (!item) return null;
+
+    return (
+        <div className="flex items-center">
+            <Trash2 onClick={onRemove} className="mr-2 w-[30px]" color="#9ca3af" />
+            <CircleMinus onClick={onMinus} className="w-[15px]" />
+            <Input
+                value={item.quantity}
+                readOnly
+                className="w-[50px] mx-2 focus-visible:border-none focus-visible:ring-0"
+            />
+            <CirclePlus onClick={onPlus} className="w-[15px]" />
+        </div>
+    );
+
 
 }

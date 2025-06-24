@@ -1,10 +1,10 @@
 "use client"
 import { Sort } from "@/components/Sort";
-import { Product } from "@/lib/type";
+import { ProductDisplayVO } from "@/domain/products"
 import { Products } from "@/components/Products";
 
 
-export default function PageClient({ products }: { products: Product[] }) {
+export default function PageClient({ products }: { products: ProductDisplayVO[] }) {
     return (
         <div className="containerContent flex justify-between">
             <Sort />

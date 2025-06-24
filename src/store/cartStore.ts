@@ -7,7 +7,9 @@ type CartStore = {
     totalPrice: number;
     totalCount: number;
     addItem: (item: Omit<CartProduct, "quantity" | "totalPrice">) => void;
-    setQuantity: (productId: string, variant: string, quantity: number) => void;
+    plusQuantity: (productId: string, variant: string) => void;
+    minusQuantity: (productId: string, variant: string) => void;
+    //setQuantity: (productId: string, variant: string, quantity: number) => void;
     removeItem: (productId: string, variant: string) => void;
 };
 
@@ -56,35 +58,72 @@ export const useCartStore = create<CartStore>()(
                     };
                 }),
 
-            setQuantity: (productId, variant, quantity) =>
+            plusQuantity: (productId, variant) => {
                 set((state) => {
                     const list = state.items[productId] || [];
-                    const updatedList = list.map((item) =>
-                        item.variant === variant
-                            ? {
+                    let perPrice = 0;
+                    const updatedList = list.map((item) => {
+                        if (item.variant === variant) {
+                            const newQuantity = item.quantity + 1;
+                            perPrice = item.price;
+                            return {
                                 ...item,
-                                quantity,
-                                totalPrice: item.price * quantity,
-                            }
-                            : item
-                    );
-                    const newItems = {
-                        ...state.items,
-                        [productId]: updatedList,
+                                quantity: newQuantity,
+                                totalPrice: item.price * newQuantity,
+                            };
+                        }
+                        return item;
+                    });
+                    return {
+                        items: {
+                            ...state.items,
+                            [productId]: updatedList,
+                        },
+                        totalPrice: state.totalPrice + perPrice,
+                        totalCount: state.totalCount + 1,
                     };
-                    const totalPrice = Object.values(newItems)
-                        .flat()
-                        .reduce((acc, item) => acc + item.quantity * item.price, 0);
-                    const totalCount = Object.values(newItems)
-                        .flat()
-                        .reduce((acc, item) => acc + item.quantity, 0);
+                })
+            },
+
+            minusQuantity: (productId, variant) => {
+                set((state) => {
+                    const list = state.items[productId] || [];
+
+                    let perPrice = 0;
+
+                    const updatedList = list
+                        .map((item) => {
+                            if (item.variant === variant) {
+                                if (item.quantity <= 1) {
+                                    // 边界情况，返回 null 表示要删掉
+                                    perPrice = item.price;
+                                    return null;
+                                }
+
+                                const newQuantity = item.quantity - 1;
+                                perPrice = item.price;
+
+                                return {
+                                    ...item,
+                                    quantity: newQuantity,
+                                    totalPrice: item.price * newQuantity,
+                                };
+                            }
+
+                            return item;
+                        })
+                        .filter((item): item is CartProduct => item !== null);
 
                     return {
-                        items: newItems,
-                        totalPrice,
-                        totalCount
+                        items: {
+                            ...state.items,
+                            [productId]: updatedList,
+                        },
+                        totalPrice: Math.max(0, state.totalPrice - perPrice),
+                        totalCount: Math.max(0, state.totalCount - 1),
                     };
-                }),
+                });
+            },
 
             removeItem: (productId, variant) =>
                 set((state) => {
