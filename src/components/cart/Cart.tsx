@@ -9,8 +9,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { useCartStore } from "@/store";
 import React from "react"
-import { CartProduct } from "@/lib/type";
 import CartItem from "./CartItem";
+import { CartProduct } from "@/types/models/cart";
 
 export default function Cart() {
     const items: Record<string, CartProduct[]> = useCartStore(state => state.items)
@@ -21,11 +21,11 @@ export default function Cart() {
             <div className="w-full">
                 <Table>
                     <TableHeader>
-                        <TableRow className="text-base hover:bg-transparent">
-                            <TableHead className="w-3/5 text-gray-500 font-normal">Item</TableHead>
-                            <TableHead className="w-[200px] text-gray-500 font-normal text-left">Quantity</TableHead>
-                            <TableHead className="w-[100px] text-gray-500 font-normal ">Price</TableHead>
-                            <TableHead className="w-[100px] text-right text-gray-500 font-normal">Total</TableHead>
+                        <TableRow className="text-base  hover:bg-transparent">
+                            <TableHead className="w-3/5 text-zinc-500 font-normal">Item</TableHead>
+                            <TableHead className="w-[200px] text-zinc-500 font-normal text-left">Quantity</TableHead>
+                            <TableHead className="w-[100px] text-zinc-500 font-normal ">Price</TableHead>
+                            <TableHead className="w-[100px] text-zinc-500 text-right  font-normal">Total</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>

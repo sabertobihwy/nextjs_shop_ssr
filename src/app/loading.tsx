@@ -1,5 +1,5 @@
-import { SORTLIST } from "@/lib/constants";
 import { Skeleton } from "@/components/ui/skeleton"
+import { SORTLIST } from "@/types/enum"
 
 export default async function Loading() {
     return (<>

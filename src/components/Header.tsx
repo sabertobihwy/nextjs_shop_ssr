@@ -1,6 +1,6 @@
 
 import { Separator } from "@/components/ui/separator"
-import { HEADERLINK, HeaderLinkItem } from "@/lib/constants"
+import { HEADERLINK, HeaderLinkItem } from "@/types/enum"
 import React from "react"
 import DefaultNavLink from "./DefaultNavLink"
 import Link from "next/link"

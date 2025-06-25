@@ -1,4 +1,4 @@
-import { SortValue } from '@/lib/type'
+import { SortValue } from '@/types/models/Sort'
 import { create } from 'zustand'
 
 type SortStoreState = {

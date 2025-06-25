@@ -1,9 +1,9 @@
 import { getProductDetail } from "@/action/action"
-import { Status } from "@/lib/constants";
-import { ActionRespType } from "@/lib/type"
 import PageClient from "./pageClient";
 import { prisma } from '@/lib/prisma'
-import { ProductDetailAdaptor, ProductDTO } from "@/domain/products";
+import { ActionRespType } from "@/types/api/response";
+import { ProductDetailAdaptor, ProductDTO } from "@/types/models/products";
+import { Status } from "@/types/enum";
 
 export async function generateStaticParams() {
     try {

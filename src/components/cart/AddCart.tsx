@@ -1,6 +1,6 @@
 "use client"
 
-import { CartProduct } from "@/lib/type";
+import { CartProduct } from "@/types/models/cart";
 import { RefObject, useCallback, useState } from "react";
 import {
     ToggleGroup,
@@ -11,7 +11,7 @@ import { useCartStore } from "@/store";
 import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner"
 import { CarouselHandle } from "../CarouselContainer";
-import { ProductDetailVO } from "@/domain/products";
+import { ProductDetailVO } from "@/types/models/products";
 
 
 export default function AddCart({ product, onClickVariantHandler }: { product: ProductDetailVO, onClickVariantHandler: RefObject<CarouselHandle | null> }) {

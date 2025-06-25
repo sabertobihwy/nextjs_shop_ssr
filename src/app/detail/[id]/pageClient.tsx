@@ -2,7 +2,7 @@
 
 import { CarouselContainer, CarouselHandle } from "@/components/CarouselContainer";
 import AddCart from "@/components/cart/AddCart";
-import { ProductDetailVO } from "@/domain/products";
+import { ProductDetailVO } from "@/types/models/products";
 import { useRef } from "react";
 
 // ProductDetailVO 

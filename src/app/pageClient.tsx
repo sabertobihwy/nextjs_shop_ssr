@@ -1,7 +1,7 @@
 "use client"
 import { Sort } from "@/components/Sort";
-import { ProductDisplayVO } from "@/domain/products"
 import { Products } from "@/components/Products";
+import { ProductDisplayVO } from "@/types/models/products";
 
 
 export default function PageClient({ products }: { products: ProductDisplayVO[] }) {

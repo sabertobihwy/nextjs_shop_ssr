@@ -1,5 +1,5 @@
 import { Separator } from "@/components/ui/separator"
-import { FOOTERLINK } from "@/lib/constants"
+import { FOOTERLINK } from "@/types/enum"
 import Link from "next/link"
 import React from "react"
 

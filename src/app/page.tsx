@@ -1,8 +1,8 @@
-import { ActionRespType } from "@/lib/type"
+import { ActionRespType } from "@/types/api/response"
 import { getProducts } from "@/action/action"
-import { Status } from "@/lib/constants"
 import PageClient from "./pageClient"
-import { ProductAdapter, ProductDisplayVO, ProductDTO } from "@/domain/products"
+import { ProductAdapter, ProductDisplayVO, ProductDTO } from "@/types/models/products"
+import { Status } from "@/types/enum"
 
 export const revalidate = 3600
 

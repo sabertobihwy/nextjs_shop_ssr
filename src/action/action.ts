@@ -1,10 +1,10 @@
 // app/actions.ts
 'use server'
 import { prisma } from '@/lib/prisma'
-//import { sql } from '@/lib/db'
-import { ActionRespType } from '@/lib/type'
-import { Status } from '@/lib/constants'
-import { ProductDTO } from '@/domain/products'
+import { ActionRespType } from '@/types/api/response'
+import { Status } from '@/types/enum'
+import { ProductDTO } from '@/types/models/products'
+
 
 
 export async function getProducts(): Promise<ActionRespType<ProductDTO>> {

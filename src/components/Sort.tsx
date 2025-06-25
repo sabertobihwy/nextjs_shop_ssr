@@ -3,8 +3,8 @@ import {
     ToggleGroup,
     ToggleGroupItem,
 } from "@/components/ui/toggle-group"
-import { SORTLIST } from "@/lib/constants";
-import { SortValue } from "@/lib/type";
+import { SORTLIST } from "@/types/enum";
+import { SortValue } from "@/types/models/Sort";
 import { useSortStore } from "@/store";
 
 export function Sort() {

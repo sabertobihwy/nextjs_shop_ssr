@@ -1,11 +1,11 @@
 "use client"
 import CartQuantity from "./CartQuantity"
 import Image from 'next/image'
-import { CartProduct } from "@/lib/type"
 import {
     TableCell,
     TableRow,
 } from "@/components/ui/table"
+import { CartProduct } from "@/types/models/cart"
 
 export default function CartItem({ item }: { item: CartProduct }) {
     //const items: Record<string, CartProduct[]> = useCartStore(state => state.items)
@@ -19,7 +19,7 @@ export default function CartItem({ item }: { item: CartProduct }) {
                     </div>
                     <div className="flex flex-col justify-center ">
                         <span className="p-2 ml-4 text-lg">{item.name}</span>
-                        <span className="p-2 ml-4 text-base text-gray-400">{item.variant}</span>
+                        <span className="p-2 ml-4 text-base text-zinc-500">{item.variant}</span>
                     </div>
                 </div>
             </TableCell>

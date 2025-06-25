@@ -28,7 +28,7 @@ export default function CartQuantity({ id, variant }: { id: string, variant: str
 
     return (
         <div className="flex items-center">
-            <Trash2 onClick={onRemove} className="mr-2 w-[30px]" color="#9ca3af" />
+            <Trash2 onClick={onRemove} className="mr-2 w-[30px]" color="#71717a" />
             <CircleMinus onClick={onMinus} className="w-[15px]" />
             <Input
                 value={item.quantity}

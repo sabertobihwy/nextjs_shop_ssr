@@ -1,4 +1,4 @@
-import { CartProduct } from "@/lib/type";
+import { CartProduct } from "@/types/models/cart";
 import { create } from "zustand";
 import { persist, createJSONStorage } from 'zustand/middleware'
 

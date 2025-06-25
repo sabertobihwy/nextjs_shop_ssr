@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { useSortStore } from '@/store'
 import { useCallback, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
-import { ProductDisplayVO } from "@/domain/products"
+import { ProductDisplayVO } from '@/types/models/products'
 
 export function Products({ list }: { list: ProductDisplayVO[] }) {
     const sortTag = useSortStore(state => state.sortTag)
