@@ -1,4 +1,4 @@
-import { HeaderLinkItem } from "@/lib/constants"
+import { HeaderLinkItem } from "@/types/enum"
 import Link from "next/link"
 
 export default async function DefaultNavLink({ href, name, icon }: HeaderLinkItem) {
