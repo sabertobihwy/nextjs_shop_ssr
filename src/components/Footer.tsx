@@ -1,14 +1,15 @@
+'use client'
 import { Separator } from "@/components/ui/separator"
-import { FOOTERLINK } from "@/types/enum"
-import Link from "next/link"
 import React from "react"
+import TenantLink from "./TenantLink"
+import { FOOTERLINK } from "@/constants/footerLinks"
 
-export async function Footer() {
+export function Footer() {
     return (
         <div className="border-t mt-6">
             <div className="containerM py-32 flex justify-between items-center">
                 <div className="text-2xl font-bold">
-                    <Link href='/'>SHOPSTACK</Link>
+                    <TenantLink href='/'>SHOPSTACK</TenantLink>
                 </div>
                 <div className="flex space-x-10 h-35">
                     {
@@ -20,7 +21,7 @@ export async function Footer() {
                                 </span>
                                 <ul className="m-4 space-y-3">
                                     {item.chidren.map((child, j) => <React.Fragment key={i - j}>
-                                        <li><Link href={child.href}>{child.name}</Link></li>
+                                        <li><TenantLink href={child.href}>{child.name}</TenantLink></li>
                                     </React.Fragment>)}
                                 </ul>
                             </div>

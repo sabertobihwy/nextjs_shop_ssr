@@ -5,7 +5,7 @@ import {
     TableCell,
     TableRow,
 } from "@/components/ui/table"
-import { CartProduct } from "@/types/models/cart"
+import { CartProduct } from "@/types/entities/cart"
 
 export default function CartItem({ item }: { item: CartProduct }) {
     //const items: Record<string, CartProduct[]> = useCartStore(state => state.items)

@@ -1,17 +1,17 @@
 "use client"
 
-import { CartProduct } from "@/types/models/cart";
+import { CartProduct } from "@/types/entities/cart";
 import { RefObject, useCallback, useState } from "react";
 import {
     ToggleGroup,
     ToggleGroupItem,
 } from "@/components/ui/toggle-group"
 import { Button } from "@/components/ui/button"
-import { useCartStore } from "@/store";
 import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner"
 import { CarouselHandle } from "../CarouselContainer";
-import { ProductDetailVO } from "@/types/models/products";
+import { ProductDetailVO } from "@/types/entities/products";
+import { useCart } from "@/redux/hooks/useCart";
 
 
 export default function AddCart({ product, onClickVariantHandler }: { product: ProductDetailVO, onClickVariantHandler: RefObject<CarouselHandle | null> }) {
@@ -25,7 +25,7 @@ export default function AddCart({ product, onClickVariantHandler }: { product: P
         setPrice(product.imgList[index].price)
         setImgurl(product.imgList[index].url)
     }, [setValue, onClickVariantHandler, product.typeIndexMap, product.imgList])
-    const addItem = useCartStore(state => state.addItem)
+    const { addItem } = useCart()
     const addToCart = useCallback(() => {
         const cartItem: Omit<CartProduct, 'quantity' | 'totalPrice'> = {
             id: product.id,

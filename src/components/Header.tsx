@@ -1,16 +1,16 @@
-
+'use client'
 import { Separator } from "@/components/ui/separator"
-import { HEADERLINK, HeaderLinkItem } from "@/types/enum"
 import React from "react"
 import DefaultNavLink from "./DefaultNavLink"
-import Link from "next/link"
+import { HEADERLINK, HeaderLinkItem } from "@/constants/headerLinks"
+import TenantLink from "./TenantLink"
 
-export async function Header() {
+export function Header() {
     return (
         <div className="h-16 border-black/20 border-b bg-white">
             <div className="containerM flex items-center justify-between h-full">
                 <h1 className="text-2xl font-bold hover:cursor-pointer">
-                    <Link href={'/'}>SHOPSTACK</Link>
+                    <TenantLink href={'/'}>SHOPSTACK</TenantLink>
                 </h1>
                 <div className="flex justify-end space-x-4 text-sm h-1/3">
                     {

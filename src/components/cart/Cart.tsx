@@ -7,14 +7,13 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { useCartStore } from "@/store";
 import React from "react"
 import CartItem from "./CartItem";
-import { CartProduct } from "@/types/models/cart";
+import { CartProduct } from "@/types/entities/cart";
+import { useCart } from "@/redux/hooks/useCart";
 
 export default function Cart() {
-    const items: Record<string, CartProduct[]> = useCartStore(state => state.items)
-    const totalPrice: number = useCartStore(state => state.totalPrice)
+    const { items, totalPrice } = useCart()
     return (<div className="containerContent flex py-25">
         <div className="flex-1 w-full flex flex-col">
             <h1 className="text-2xl font-bold py-3">Cart</h1>

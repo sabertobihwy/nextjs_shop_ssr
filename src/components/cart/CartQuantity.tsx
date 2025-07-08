@@ -1,15 +1,13 @@
 "use client"
 
-import { useCartStore } from "@/store"
 import { Trash2 } from 'lucide-react';
 import { CirclePlus, CircleMinus } from 'lucide-react';
 import { Input } from "@/components/ui/input"
 import { useMemo } from "react";
+import { useCart } from '@/redux/hooks/useCart';
 
 function useCartItemActions(id: string, variant: string) {
-    const plusQuantity = useCartStore(s => s.plusQuantity);
-    const minusQuantity = useCartStore(s => s.minusQuantity);
-    const removeItem = useCartStore(s => s.removeItem);
+    const { plusQuantity, minusQuantity, removeItem } = useCart()
 
     return {
         onPlus: () => plusQuantity(id, variant),
@@ -20,7 +18,7 @@ function useCartItemActions(id: string, variant: string) {
 
 
 export default function CartQuantity({ id, variant }: { id: string, variant: string }) {
-    const items = useCartStore(state => state.items)
+    const { items } = useCart()
     const item = useMemo(() => items[id]?.find(i => i.variant === variant), [items, id, variant]);
     const { onPlus, onMinus, onRemove } = useCartItemActions(id, variant);
 

@@ -1,12 +1,12 @@
-import { HeaderLinkItem } from "@/types/enum"
-import Link from "next/link"
+import { HeaderLinkItem } from "@/constants/headerLinks"
+import TenantLink from "./TenantLink"
 
-export default async function DefaultNavLink({ href, name, icon }: HeaderLinkItem) {
+export default function DefaultNavLink({ href, name, icon }: HeaderLinkItem) {
     return (<>
-        <Link href={href} className="text-lg flex gap-2">
+        <TenantLink href={href} className="text-lg flex gap-2">
             {icon}
             {name}
-        </Link>
+        </TenantLink>
 
     </>)
 } 
