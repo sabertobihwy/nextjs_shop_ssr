@@ -10,7 +10,7 @@ import { useFormState } from 'react-dom';
 import { useFormStatus } from 'react-dom';
 import debounce from 'lodash.debounce';
 import { useRouter } from 'next/router';
-import { useTenantStore } from '@/Zustandstore/tenantStore';
+import { useTenantName } from '@/redux/hooks/useTenant';
 
 const initialState: ActionRespType<SafeUser> = {
     status: Status.ERROR,
@@ -48,7 +48,7 @@ async function validatedLoginAction(_: unknown, formData: FormData) {
 }
 
 export default function LoginForm() {
-    const { tenant } = useTenantStore()()
+    const tenantName = useTenantName()
     const [state, formAction] = useFormState(validatedLoginAction, initialState);
     const [errors, setErrors] = useState<Partial<Record<keyof LoginInput, string>>>({});
     const formRef = useRef<HTMLFormElement>(null);
@@ -77,11 +77,11 @@ export default function LoginForm() {
         if (state.status === Status.SUCCESS) {
             setShowRedirectMessage(true);
             const timer = setTimeout(() => {
-                router.push(`/${tenant.tenantName}`);
+                router.push(`/${tenantName}`);
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [state, router, tenant.tenantName]);
+    }, [state, router, tenantName]);
 
     return (
         <form action={formAction}
@@ -91,7 +91,7 @@ export default function LoginForm() {
             {errors.username && <p className="text-red-500 text-sm">{errors.username}</p>}
             <input name="password" type="password" placeholder="Password" className="input" onChange={(e) => debouncedValidate("password", e.target.value)} />
             {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
-            <input name="tenantName" type='hidden' className="input" value={tenant.tenantName} />
+            <input name="tenantName" type='hidden' className="input" value={tenantName} />
             {/* ✅ 错误提示 */}
             {state.status === Status.ERROR && (
                 <p className="text-red-500 text-sm">{state.message}</p>

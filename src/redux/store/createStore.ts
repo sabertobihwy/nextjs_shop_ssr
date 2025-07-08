@@ -1,6 +1,7 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import { persistReducer, persistStore } from 'redux-persist'
 import tenantReducer from '@/redux/features/tenant/tenantSlice'
+import authReducer from '@/redux/features/auth/authSlice'
 import cartReducer from '@/redux/features/cart/cartSlice'
 import sortReducer from '@/redux/features/sort/sortSlice'
 import { getCartPersistConfig } from '../features/cart/persistConfig'
@@ -8,6 +9,7 @@ import { getCartPersistConfig } from '../features/cart/persistConfig'
 export function createReduxStore(tenantName: string) {
     const rootReducer = combineReducers({
         tenant: tenantReducer,
+        auth: authReducer,
         sort: sortReducer,
         cart: persistReducer(getCartPersistConfig(tenantName), cartReducer)
     })
