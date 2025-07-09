@@ -6,6 +6,7 @@ import { Metadata } from "next";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import Providers from "@/components/ReduxProvider";
+import Script from 'next/script'
 
 export async function generateMetadata({
   params,
@@ -32,6 +33,13 @@ export default async function RootLayout({
   const { tenant: tenantName } = await params
   return (
     <html lang="en">
+      <head>
+        {/* 全局加载 Turnstile 脚本，但 onload callback 由页面控制 */}
+        <Script
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+          strategy="afterInteractive" // after client hydration 
+        />
+      </head>
       <body>
         <Providers tenantName={tenantName}>
           <Header />

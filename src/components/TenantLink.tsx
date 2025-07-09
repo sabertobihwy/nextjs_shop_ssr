@@ -1,7 +1,7 @@
 // components/TenantLink.tsx
 'use client'
 
-import { useTenantName } from '@/redux/hooks/useTenant'
+import { useTenant } from '@/redux/hooks/useTenant'
 import Link from 'next/link'
 
 /**
@@ -13,7 +13,7 @@ export default function TenantLink({
     href,
     ...props
 }: React.ComponentProps<typeof Link>) {
-    const tenantName = useTenantName()
+    const { tenantName } = useTenant()
 
     if (!tenantName) return null
 

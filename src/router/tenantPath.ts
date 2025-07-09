@@ -1,8 +1,8 @@
 'use client'
 
-import { useTenantName } from "@/redux/hooks/useTenant"
+import { useTenant } from "@/redux/hooks/useTenant"
 
 export function useTenantPath() {
-    const tenantName = useTenantName()
+    const { tenantName } = useTenant()
     return (path: string) => `/${tenantName}${path.startsWith('/') ? path : '/' + path}`
 }

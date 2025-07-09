@@ -13,6 +13,8 @@ export enum ErrorCode {
     UNAUTHORIZED = 2000, // 未登录
     FORBIDDEN = 2001,     // 权限不足
     TOKEN_EXPIRED = 2002,
+    IP_EXCEED_LIMIT = 2003, //IP restriction
+    Turnstile_TOKEN_MISSING = 2004,
 
     // 用户相关
     USER_NOT_FOUND = 3000,
@@ -34,7 +36,10 @@ export enum ErrorCode {
     // 系统相关
     INTERNAL_SERVER_ERROR = 9000,
     SERVICE_UNAVAILABLE = 9001,
+    DATABASE_ERROR = 9002,
 
     // tenant相关
     TENANT_NOT_FOUND = 10000
+
+
 }

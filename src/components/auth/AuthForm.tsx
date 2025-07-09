@@ -4,7 +4,7 @@ import { z } from 'zod'
 import { useForm, Path } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
-import { ActionRespType, Status } from '@/types/api/response'
+import { ActionRespType, ActionRespTypeError, Status } from '@/types/api/response'
 import { Button } from '@/components/ui/button'
 import {
     Form,
@@ -16,10 +16,13 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import TenantLink from '@/components/TenantLink'
-import { useTenantName } from '@/redux/hooks/useTenant'
 import { useTenantRouter } from '@/router/useTenantRouter'
 import { useAuth } from '@/redux/hooks/useAuth'
 import { toUserPublic, isSafeUser } from '@/types/entities/User'
+import { useTenant } from '@/redux/hooks/useTenant'
+import Turnstile from './Turnstile'
+import { useStatus, StatusHint } from './useStatus'
+
 
 type AuthFormProps<S extends z.ZodTypeAny, R = null> = {
     schema: S
@@ -31,7 +34,8 @@ type AuthFormProps<S extends z.ZodTypeAny, R = null> = {
     alternateLink?: {
         href: string
         label: string
-    }
+    },
+    IPcheck?: boolean
 }
 
 
@@ -42,9 +46,10 @@ export default function AuthForm<S extends z.ZodTypeAny, R>({
     successRedirect,
     successMessage,
     submitText,
-    alternateLink
+    alternateLink,
+    IPcheck
 }: AuthFormProps<S, R>) {
-    const tenantName = useTenantName()
+    const { tenantName, tenantId } = useTenant()
     const { push } = useTenantRouter()
 
     const form = useForm<z.infer<S>>({
@@ -55,24 +60,49 @@ export default function AuthForm<S extends z.ZodTypeAny, R>({
         }
     })
 
-    const [statusMessage, setStatusMessage] = useState<string | null>(null)
-    const [status, setStatus] = useState<Status | null>(null)
+    const {
+        status,
+        message,
+        setLoading,
+        setSuccess,
+        setError,
+    } = useStatus()
+    const [token, setToken] = useState<string | null>(null)
     const { setUser } = useAuth()
 
     async function onSubmit(values: z.infer<S>) {
+        if (!token) return alert('请先通过人机验证')
+        setLoading("处理中...")
+        await Promise.resolve()
+        if (IPcheck) {
+            const ipRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/${tenantName}/account/ipcheck`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    tenant_id: tenantId,
+                    turnstile_token: token
+                }),
+            })
+            if (!ipRes.ok) {
+                const err: ActionRespTypeError = await ipRes.json();
+                setError(err.message || err.code.toString())
+                return
+                // other error 
+                //push(`/not-found?httpcode=${ipRes.status}`);
+            }
+        }
         const result = await onSubmitAction(values)
-
         if (result.status === Status.SUCCESS) {
-            setStatus(Status.SUCCESS)
-            setStatusMessage(successMessage)
+            setSuccess(successMessage)
             if (isSafeUser(result.data)) { // for login
                 setUser(toUserPublic(result.data))
             }
             setTimeout(() => push(`${successRedirect}`), 3000)
         } else {
-            setStatus(Status.ERROR)
+            setError(result.message || result.code.toString())
             console.log(JSON.stringify(result, null, 2))
-            setStatusMessage(result.message || result.code.toString())
         }
     }
 
@@ -112,15 +142,10 @@ export default function AuthForm<S extends z.ZodTypeAny, R>({
                 {/* 租户名（隐藏） */}
                 <input type="hidden" {...form.register('tenantName' as Path<z.infer<S>>)} value={tenantName} />
 
-                {/* 状态提示 */}
-                {status === Status.ERROR && (
-                    <p className="text-red-500 text-sm">{statusMessage}</p>
-                )}
-                {status === Status.SUCCESS && (
-                    <p className="text-green-600 text-sm">{statusMessage}</p>
-                )}
-
-                <Button type="submit">{submitText}</Button>
+                {IPcheck && <Turnstile onSuccess={setToken} />}
+                <Button type="submit" size={"lg"}>{submitText}</Button>
+                {/* 状态提示（稳定占位） */}
+                <StatusHint status={status} message={message} />
 
                 {/* 登录跳转 */}
                 {alternateLink && (

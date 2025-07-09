@@ -36,8 +36,11 @@ export const errorMessageMap: Record<ErrorCode, string> = {
     // tenant 
     [ErrorCode.TENANT_NOT_FOUND]: '找不到商户',
     [ErrorCode.INVALID_PASSWORD]: "密码不正确",
-    [ErrorCode.INVALID_UUID]: "",
-    [ErrorCode.INVALID_HASHED_PASSWORD]: "",
-    [ErrorCode.INVALID_INPUT]: ""
+    [ErrorCode.INVALID_UUID]: "INVALID_UUID",
+    [ErrorCode.INVALID_HASHED_PASSWORD]: "INVALID_HASHED_PASSWORD",
+    [ErrorCode.INVALID_INPUT]: "INVALID_INPUT",
+    [ErrorCode.IP_EXCEED_LIMIT]: "IP_EXCEED_LIMIT",
+    [ErrorCode.DATABASE_ERROR]: "DATABASE_ERROR",
+    [ErrorCode.Turnstile_TOKEN_MISSING]: "Turnstile_TOKEN_MISSING"
 }
 

@@ -26,5 +26,5 @@ export default async function Page({ params }: { params: Promise<{ tenant: strin
     // 现在result =  ActionRespTypeSuccess<T>
     const adapter = new ProductAdapter(productDTOlst)
     const productDisplayList: ProductDisplayVO[] = adapter.toProductDisplayVO()
-    return <PageClient products={productDisplayList} />
+    return <PageClient products={productDisplayList} tenantId={tenantId} />
 }

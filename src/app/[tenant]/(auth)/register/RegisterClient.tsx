@@ -14,6 +14,7 @@ export default function RegisterClient() {
             successMessage="注册成功，正在跳转登录页..."
             submitText="注册"
             alternateLink={{ href: '/login', label: '已有账号？去登录' }}
+            IPcheck={true}
         />
     </div>
 }

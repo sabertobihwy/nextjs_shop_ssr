@@ -1,7 +1,7 @@
 // lib/useTenantRouter.ts
 'use client'
 
-import { useTenantName } from '@/redux/hooks/useTenant'
+import { useTenant } from '@/redux/hooks/useTenant'
 import { useRouter } from 'next/navigation'
 /**
  * 
@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation'
         push('/detail/123')
  */
 export function useTenantRouter() {
-    const tenantName = useTenantName()
+    const { tenantName } = useTenant()
     const router = useRouter()
 
     function push(path: string) {
