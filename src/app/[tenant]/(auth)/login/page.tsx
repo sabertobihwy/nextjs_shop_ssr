@@ -1,5 +1,5 @@
-import Login from "./LoginPageClient";
+import LoginClient from "./LoginClient";
 
 export default async function Page() {
-    return <Login />
+    return <LoginClient />
 }

@@ -13,11 +13,14 @@ import { cookies } from 'next/headers'
 
 // login client : get tenantName -> login server
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function loginAction(_: any, formData: FormData): Promise<ActionRespType<SafeUser>> {
+export async function LoginAction(payload: {
+    username: string
+    password: string
+    tenantName: string
+}): Promise<ActionRespType<SafeUser>> {
     try {
-        const raw = Object.fromEntries(formData.entries());
         // 0. zod validation
-        const result = LoginSchema.safeParse(raw)
+        const result = LoginSchema.safeParse(payload)
         if (!result.success) {
             throw new BizError(ErrorCode.INVALID_INPUT, 400)
         }

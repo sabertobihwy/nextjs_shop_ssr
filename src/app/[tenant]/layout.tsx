@@ -30,7 +30,6 @@ export default async function RootLayout({
   params: Promise<{ tenant: string }>
 }>) {
   const { tenant: tenantName } = await params
-  console.log('✅ tenant param:', tenantName)
   return (
     <html lang="en">
       <body>

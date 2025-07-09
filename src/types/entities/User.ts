@@ -37,6 +37,19 @@ export function toSafeUser(user: {
     }
 }
 
+export function isSafeUser(value: unknown): value is SafeUser {
+    return (
+        !!value &&
+        typeof value === 'object' &&
+        'id' in value &&
+        'username' in value &&
+        'tenant_id' in value &&
+        'role' in value &&
+        (value['role'] === 'user' || value['role'] === 'admin')
+    )
+}
+
+
 export function toUserPublic(user: SafeUser): UserPublic {
     return {
         id: user.id,
