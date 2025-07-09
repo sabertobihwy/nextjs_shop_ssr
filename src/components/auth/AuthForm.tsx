@@ -71,7 +71,10 @@ export default function AuthForm<S extends z.ZodTypeAny, R>({
     const { setUser } = useAuth()
 
     async function onSubmit(values: z.infer<S>) {
-        if (!token) return alert('请先通过人机验证')
+        if (!token && IPcheck) {
+            setError("请先通过人机验证")
+            return
+        }
         setLoading("处理中...")
         await Promise.resolve()
         if (IPcheck) {
