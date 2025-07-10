@@ -12,6 +12,8 @@ export type SafeUser = {
 // client 
 export type UserPublic = {
     username: string
+    tenantId: string,
+    role: 'user' | 'admin'
 }
 
 // 类型守卫 + 类型转换
@@ -51,7 +53,9 @@ export function isSafeUser(value: unknown): value is SafeUser {
 
 export function toUserPublic(user: SafeUser): UserPublic {
     return {
-        username: user.username
+        username: user.username,
+        tenantId: user.tenant_id,
+        role: user.role
     }
 }
 

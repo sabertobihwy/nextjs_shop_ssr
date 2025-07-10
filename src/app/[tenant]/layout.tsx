@@ -33,12 +33,12 @@ export default async function RootLayout({
 }>) {
   const { tenant: tenantName } = await params
   const cookieStore = await cookies()
-  const userPublicCookie = cookieStore.get('userPublic')?.value
+  const userPublicCookie = cookieStore.get('userPublic' + tenantName)?.value
   let userPublic = null
   if (userPublicCookie) {
     try {
       userPublic = JSON.parse(decodeURIComponent(userPublicCookie))
-      console.log("Layout💧" + userPublic)
+      // console.log("Layout💧" + userPublic)
     } catch {
       userPublic = null
     }

@@ -100,7 +100,8 @@ export default function AuthForm<S extends z.ZodTypeAny, R>({
                 //setUser(toUserPublic(result.data))
                 const maxAge = 60 * 60 * 24 * 7 // 秒数，7天
                 const expires = new Date(Date.now() + maxAge * 1000).toUTCString()
-                document.cookie = `userPublic=${encodeURIComponent(JSON.stringify(toUserPublic(result.data)))}; path=/; expires=${expires}; sameSite=Lax`
+                //   console.log(`userPublic${tenantName}`)
+                document.cookie = `userPublic${tenantName}=${encodeURIComponent(JSON.stringify(toUserPublic(result.data)))}; path=/; expires=${expires}; sameSite=Lax`
 
             }
             setTimeout(() => tenantRedirect(`${successRedirect}`), 1000)
