@@ -7,7 +7,7 @@ export default async function Page({ params }: { params: Promise<{ tenant: strin
 
     const { tenant: tenantName } = await params
     // 自动 force-dynamic 
-    const safeUser = await getUserFromCookie()
+    const safeUser = await getUserFromCookie(tenantName)
     if (!safeUser) {
         redirect(`/${tenantName}/login`)
     }

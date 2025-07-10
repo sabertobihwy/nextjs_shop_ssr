@@ -4,9 +4,9 @@ import { getUserById } from '@/db/user.dao'
 import { SafeUser } from '@/types/entities/User'
 import { cookies } from 'next/headers'
 
-export async function getUserFromCookie(): Promise<SafeUser | null> {
+export async function getUserFromCookie(tenantName: string): Promise<SafeUser | null> {
     const cookieStore = await cookies()
-    const token = cookieStore.get('token')?.value
+    const token = cookieStore.get('token' + tenantName)?.value
     if (!token) return null
 
     const payload = verifyJwt(token)

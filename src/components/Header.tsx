@@ -6,9 +6,11 @@ import { HEADERLINK, HeaderLinkItem } from "@/constants/headerLinks"
 import TenantLink from "./tenant/TenantLink"
 import { useAuth } from "@/redux/hooks/useAuth"
 import { logoutAction } from "@/actions/auth/logout"
+import { useTenant } from "@/redux/hooks/useTenant"
 
 export function Header() {
     const { user } = useAuth()
+    const { tenantName } = useTenant()
     return (
         <div className="h-16 border-black/20 border-b bg-white">
             <div className="containerContent flex items-center justify-between h-full">
@@ -43,6 +45,7 @@ export function Header() {
                     >
                         <span>{user?.username}</span>
                         <form action={logoutAction}>
+                            <input type="hidden" name="tenantName" value={tenantName} />
                             <button type="submit" className="text-black hover:underline">
                                 Logout
                             </button>
