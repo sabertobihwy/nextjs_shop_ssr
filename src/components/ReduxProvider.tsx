@@ -4,14 +4,16 @@ import { ReactNode } from 'react'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { createReduxStore } from '@/redux/store/createStore'
+import { UserPublic } from '@/types/entities/User'
 
 type Props = {
     tenantName: string
+    userpublic: UserPublic | null
     children: ReactNode
 }
 
-export default function Providers({ tenantName, children }: Props) {
-    const { store, persistor } = createReduxStore(tenantName)
+export default function Providers({ tenantName, userpublic, children }: Props) {
+    const { store, persistor } = createReduxStore(tenantName, userpublic)
 
     return (
         <Provider store={store}>

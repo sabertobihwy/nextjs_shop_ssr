@@ -1,9 +1,8 @@
 'use server'
 
-import { ActionRespType, Status } from "@/types/api/response"
 import { cookies } from "next/headers"
 
-export async function logoutAction(): Promise<ActionRespType<null>> {
+export async function logoutAction(): Promise<void> {
     const cookieStore = await cookies()
 
     cookieStore.set({
@@ -13,9 +12,11 @@ export async function logoutAction(): Promise<ActionRespType<null>> {
         maxAge: 0, // 立即过期
     })
 
-    return {
-        status: Status.SUCCESS,
-        code: 0,
-        data: null,
-    }
+    cookieStore.set({
+        name: 'userPublic',
+        value: '',
+        path: '/',
+        maxAge: 0,
+    })
+
 }

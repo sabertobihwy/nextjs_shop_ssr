@@ -5,8 +5,9 @@ import authReducer from '@/redux/features/auth/authSlice'
 import cartReducer from '@/redux/features/cart/cartSlice'
 import sortReducer from '@/redux/features/sort/sortSlice'
 import { getCartPersistConfig } from '../features/cart/persistConfig'
+import { UserPublic } from '@/types/entities/User'
 
-export function createReduxStore(tenantName: string) {
+export function createReduxStore(tenantName: string, userInfo: UserPublic | null) {
     const rootReducer = combineReducers({
         tenant: tenantReducer,
         auth: authReducer,
@@ -19,6 +20,9 @@ export function createReduxStore(tenantName: string) {
         tenant: {
             tenantName,
             tenantId: ''
+        },
+        auth: {
+            user: userInfo
         }
     }
 

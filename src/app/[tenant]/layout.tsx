@@ -7,6 +7,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import Providers from "@/components/ReduxProvider";
 import Script from 'next/script'
+import { cookies } from "next/headers";
 
 export async function generateMetadata({
   params,
@@ -31,6 +32,17 @@ export default async function RootLayout({
   params: Promise<{ tenant: string }>
 }>) {
   const { tenant: tenantName } = await params
+  const cookieStore = await cookies()
+  const userPublicCookie = cookieStore.get('userPublic')?.value
+  let userPublic = null
+  if (userPublicCookie) {
+    try {
+      userPublic = JSON.parse(decodeURIComponent(userPublicCookie))
+      console.log("Layout💧" + userPublic)
+    } catch {
+      userPublic = null
+    }
+  }
   return (
     <html lang="en">
       <head>
@@ -41,7 +53,7 @@ export default async function RootLayout({
         />
       </head>
       <body>
-        <Providers tenantName={tenantName}>
+        <Providers tenantName={tenantName} userpublic={userPublic}>
           <Header />
           {children}
           <Footer />

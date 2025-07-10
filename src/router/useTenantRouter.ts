@@ -13,6 +13,7 @@ export function useTenantRouter() {
     const { tenantName } = useTenant()
     const router = useRouter()
 
+    // 不走Layout
     function push(path: string) {
         if (!tenantName) throw new Error('tenant not set')
         const normalizedPath = path.startsWith('/') ? path : `/${path}`
@@ -24,6 +25,12 @@ export function useTenantRouter() {
         const normalizedPath = path.startsWith('/') ? path : `/${path}`
         router.replace(`/${tenantName}${normalizedPath}`)
     }
+    // 走Layout
+    function tenantRedirect(path: string) {
+        if (!tenantName) throw new Error('tenant not set')
+        const normalizedPath = path.startsWith('/') ? path : `/${path}`
+        window.location.href = `/${tenantName}${normalizedPath}`
+    }
 
-    return { push, replace }
+    return { push, replace, tenantRedirect }
 }

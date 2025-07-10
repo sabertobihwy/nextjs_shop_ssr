@@ -1,7 +1,7 @@
 'use client'
 import { Separator } from "@/components/ui/separator"
 import React from "react"
-import TenantLink from "./TenantLink"
+import TenantLink from "./tenant/TenantLink"
 import { FOOTERLINK } from "@/constants/footerLinks"
 
 export function Footer() {

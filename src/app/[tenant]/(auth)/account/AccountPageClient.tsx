@@ -1,14 +1,8 @@
 "use client"
-import { useEffect } from "react"
-import { UserPublic } from "@/types/entities/User"
-import { useAuth } from "@/redux/hooks/useAuth"
+import { SafeUser } from "@/types/entities/User"
 
-export default function AccountPageClient({ user }: { user: UserPublic }) {
-    const { setUser } = useAuth()
-    useEffect(() => {
-        setUser(user)
-    }, [user, setUser])
+export default function AccountPageClient({ safeUser }: { safeUser: SafeUser }) {
 
 
-    return <>{user.username}</>
+    return <>{safeUser.username}</>
 }

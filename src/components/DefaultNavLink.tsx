@@ -1,5 +1,5 @@
 import { HeaderLinkItem } from "@/constants/headerLinks"
-import TenantLink from "./TenantLink"
+import TenantLink from "./tenant/TenantLink"
 
 export default function DefaultNavLink({ href, name, icon }: HeaderLinkItem) {
     return (<>

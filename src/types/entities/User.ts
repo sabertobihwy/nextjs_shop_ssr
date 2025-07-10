@@ -11,7 +11,6 @@ export type SafeUser = {
 
 // client 
 export type UserPublic = {
-    id: string
     username: string
 }
 
@@ -52,7 +51,6 @@ export function isSafeUser(value: unknown): value is SafeUser {
 
 export function toUserPublic(user: SafeUser): UserPublic {
     return {
-        id: user.id,
         username: user.username
     }
 }

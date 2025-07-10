@@ -15,14 +15,12 @@ import {
     FormMessage
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import TenantLink from '@/components/TenantLink'
+import TenantLink from '@/components/tenant/TenantLink'
 import { useTenantRouter } from '@/router/useTenantRouter'
-import { useAuth } from '@/redux/hooks/useAuth'
-import { toUserPublic, isSafeUser } from '@/types/entities/User'
+import { isSafeUser, toUserPublic } from '@/types/entities/User'
 import { useTenant } from '@/redux/hooks/useTenant'
 import Turnstile from './Turnstile'
 import { useStatus, StatusHint } from './useStatus'
-
 
 type AuthFormProps<S extends z.ZodTypeAny, R = null> = {
     schema: S
@@ -50,7 +48,7 @@ export default function AuthForm<S extends z.ZodTypeAny, R>({
     IPcheck
 }: AuthFormProps<S, R>) {
     const { tenantName, tenantId } = useTenant()
-    const { push } = useTenantRouter()
+    const { tenantRedirect } = useTenantRouter()
 
     const form = useForm<z.infer<S>>({
         resolver: zodResolver(schema),
@@ -68,7 +66,6 @@ export default function AuthForm<S extends z.ZodTypeAny, R>({
         setError,
     } = useStatus()
     const [token, setToken] = useState<string | null>(null)
-    const { setUser } = useAuth()
 
     async function onSubmit(values: z.infer<S>) {
         if (!token && IPcheck) {
@@ -100,9 +97,13 @@ export default function AuthForm<S extends z.ZodTypeAny, R>({
         if (result.status === Status.SUCCESS) {
             setSuccess(successMessage)
             if (isSafeUser(result.data)) { // for login
-                setUser(toUserPublic(result.data))
+                //setUser(toUserPublic(result.data))
+                const maxAge = 60 * 60 * 24 * 7 // 秒数，7天
+                const expires = new Date(Date.now() + maxAge * 1000).toUTCString()
+                document.cookie = `userPublic=${encodeURIComponent(JSON.stringify(toUserPublic(result.data)))}; path=/; expires=${expires}; sameSite=Lax`
+
             }
-            setTimeout(() => push(`${successRedirect}`), 3000)
+            setTimeout(() => tenantRedirect(`${successRedirect}`), 1000)
         } else {
             setError(result.message || result.code.toString())
             console.log(JSON.stringify(result, null, 2))
