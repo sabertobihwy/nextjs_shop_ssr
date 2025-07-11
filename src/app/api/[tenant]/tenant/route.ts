@@ -7,7 +7,7 @@ import { NextResponse } from "next/server"
 export async function GET(req: Request, { params }: { params: Promise<{ tenant: string }> }): Promise<NextResponse> {
     try {
         const { tenant: tenantName } = await params
-
+        console.log('======getTenantByNameStrict=====,tenantName:' + tenantName)
         const data: TenantPublic = await getTenantByNameStrict(tenantName)
 
         const resp: ActionRespType<typeof data> = {

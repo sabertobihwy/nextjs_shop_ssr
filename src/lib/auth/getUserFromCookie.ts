@@ -1,4 +1,4 @@
-// Server-only: SSR or route handler 使用
+// deprecated
 import { verifyJwt } from '@/auth/jwt'
 import { getUserById } from '@/db/user.dao'
 import { SafeUser } from '@/types/entities/User'

@@ -1,11 +1,12 @@
 'use server'
 
 import { signJwt } from "@/auth/jwt";
+import { COOKIE_PREFIX, TOKEN_EXPIRY } from "@/constants/cookies";
 import { getTenantByNameStrict } from "@/db/tenants.dao";
 import { getUserByUserNameStrict } from "@/db/user.dao";
 import { LoginSchema } from "@/lib/schemas/base";
 import { ActionRespType, Status } from "@/types/api/response";
-import { SafeUser } from "@/types/entities/User";
+import { SafeUser, toUserPublic } from "@/types/entities/User";
 import { BizError } from "@/types/shared/BizError";
 import { ErrorCode } from "@/types/shared/error-code";
 import bcrypt from "bcryptjs";
@@ -43,23 +44,49 @@ export async function LoginAction(payload: {
             role: user.role as 'user' | 'admin',
         }
 
-        // 4. 签发 token
-        const token = signJwt({
+        // 4. 签发 ACCESS_TOKEN
+        const accessToken = signJwt({
             sub: safeUser.id,
             username: safeUser.username,
             tenantId: safeUser.tenant_id,
             role: safeUser.role,
-        })
+        }, { expiresIn: TOKEN_EXPIRY.ACCESS_TOKEN.JWT })  // 设置过期时间为 1 小时
+
+        const refreshToken = signJwt({
+            sub: safeUser.id,
+            username: safeUser.username,
+            tenantId: safeUser.tenant_id,
+            role: safeUser.role,
+        }, { expiresIn: TOKEN_EXPIRY.REFRESH_TOKEN.JWT })  // 设置过期时间为 7 天
 
         const cookieStore = await cookies()
+        const tenantKey = tenantName.toLowerCase()
+
         cookieStore.set({
-            name: 'token' + tenantName,
-            value: token,
+            name: `${COOKIE_PREFIX.ACCESS_TOKEN}${tenantKey}`,
+            value: accessToken,
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
             path: '/',
-            maxAge: 60 * 60 * 24 * 7, // 7天
+            maxAge: TOKEN_EXPIRY.ACCESS_TOKEN.COOKIE,
+        })
+
+        cookieStore.set({
+            name: `${COOKIE_PREFIX.REFRESH_TOKEN}${tenantKey}`,
+            value: refreshToken,
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            path: '/',
+            maxAge: TOKEN_EXPIRY.REFRESH_TOKEN.COOKIE,
+        })
+
+        const userPublicStr = JSON.stringify(toUserPublic(safeUser))
+        cookieStore.set(`${COOKIE_PREFIX.USER_PUBLIC}${tenantKey}`, userPublicStr, {
+            httpOnly: false,
+            maxAge: TOKEN_EXPIRY.USER_PUBLIC.COOKIE,
+            path: '/',
         })
 
         // 7. 返回成功响应

@@ -58,7 +58,7 @@ export default function TurnstileCheck({ onSuccess }: { onSuccess: (token: strin
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    return (<div className="checkbox mb-5">
+    return (<div className="checkbox">
         <div ref={ref} ></div>
     </div>)
 

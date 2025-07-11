@@ -17,7 +17,6 @@ import {
 import { Input } from '@/components/ui/input'
 import TenantLink from '@/components/tenant/TenantLink'
 import { useTenantRouter } from '@/router/useTenantRouter'
-import { isSafeUser, toUserPublic } from '@/types/entities/User'
 import { useTenant } from '@/redux/hooks/useTenant'
 import Turnstile from './Turnstile'
 import { useStatus, StatusHint } from './useStatus'
@@ -96,14 +95,14 @@ export default function AuthForm<S extends z.ZodTypeAny, R>({
         const result = await onSubmitAction(values)
         if (result.status === Status.SUCCESS) {
             setSuccess(successMessage)
-            if (isSafeUser(result.data)) { // for login
-                //setUser(toUserPublic(result.data))
-                const maxAge = 60 * 60 * 24 * 7 // 秒数，7天
-                const expires = new Date(Date.now() + maxAge * 1000).toUTCString()
-                //   console.log(`userPublic${tenantName}`)
-                document.cookie = `userPublic${tenantName}=${encodeURIComponent(JSON.stringify(toUserPublic(result.data)))}; path=/; expires=${expires}; sameSite=Lax`
+            // if (isSafeUser(result.data)) { // for login
+            //     // todo: 应该改成login返回自动设置！
+            //     const maxAge = 60 * 60 * 24 * 7 // 秒数，7天
+            //     const expires = new Date(Date.now() + maxAge * 1000).toUTCString()
+            //     document.cookie = `userPublic${tenantName}=${encodeURIComponent(JSON.stringify(toUserPublic(result.data)))}; 
+            //     path=/; expires=${expires}; sameSite=Lax`
 
-            }
+            // }
             setTimeout(() => tenantRedirect(`${successRedirect}`), 1000)
         } else {
             setError(result.message || result.code.toString())
@@ -146,8 +145,9 @@ export default function AuthForm<S extends z.ZodTypeAny, R>({
 
                 {/* 租户名（隐藏） */}
                 <input type="hidden" {...form.register('tenantName' as Path<z.infer<S>>)} value={tenantName} />
-
-                {IPcheck && <Turnstile onSuccess={setToken} />}
+                <div className={`mb-5 ${IPcheck ? "min-h-[80px]" : ""} `}>
+                    {IPcheck && <Turnstile onSuccess={setToken} />}
+                </div>
                 <Button type="submit" size={"lg"}>{submitText}</Button>
                 {/* 状态提示（稳定占位） */}
                 <StatusHint status={status} message={message} />

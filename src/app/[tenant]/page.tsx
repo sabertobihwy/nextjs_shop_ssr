@@ -15,16 +15,17 @@ export default async function Page({ params }: { params: Promise<{ tenant: strin
     const tenantRes = await fetch(`${process.env.NEXT_BASE_URL}/api/${tenantName}/tenant`, {
         next: { revalidate: 3600 }
     })
-    const { tenantId } = await assertApiSuccess<TenantPublic>(tenantRes)
+    const { tenantId } = (await assertApiSuccess<TenantPublic>(tenantRes))!
     // get - server fetch - route handler 
 
     const productRes = await fetch(`${process.env.NEXT_BASE_URL}/api/${tenantName}/products?tenantId=${tenantId}`,
         {
             next: { revalidate: 3600 }
         })
-    const productDTOlst = await assertApiSuccess<ProductDTO[]>(productRes)
+    const productDTOlst = (await assertApiSuccess<ProductDTO[]>(productRes))!
     // 现在result =  ActionRespTypeSuccess<T>
     const adapter = new ProductAdapter(productDTOlst)
     const productDisplayList: ProductDisplayVO[] = adapter.toProductDisplayVO()
     return <PageClient products={productDisplayList} tenantId={tenantId} />
+
 }

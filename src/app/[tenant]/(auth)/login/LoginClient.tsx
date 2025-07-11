@@ -4,7 +4,7 @@ import AuthForm from "@/components/auth/AuthForm"
 import { LoginSchema } from "@/lib/schemas/base"
 
 export default function LoginPageClient() {
-    return <div className="containerM max-w-[400px] py-5 border shadow-lg">
+    return <div className="containerM w-[400px] py-5 border shadow-lg">
         <AuthForm
             schema={LoginSchema}
             defaultValues={{ username: '', password: '', tenantName: '' }}

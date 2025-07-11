@@ -7,7 +7,7 @@ import {
     ToggleGroupItem,
 } from "@/components/ui/toggle-group"
 import { Button } from "@/components/ui/button"
-import { Toaster } from "@/components/ui/sonner"
+// import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner"
 import { CarouselHandle } from "../CarouselContainer";
 import { ProductDetailVO } from "@/types/entities/products";
@@ -60,7 +60,7 @@ export default function AddCart({ product, onClickVariantHandler }: { product: P
             onClick={addToCart}
             variant="outline" disabled={value ? false : true}
         >Add to Cart</Button>
-        <Toaster />
+        {/* <Toaster /> */}
     </div>)
 
 }

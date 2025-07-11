@@ -1,12 +1,14 @@
 import { supabase } from "@/db/supabase"
-import { assertApiSuccess } from "@/lib/http/assert"
+import { getTenantByNameStrict } from "@/db/tenants.dao"
 import { verifyTurnstile } from "@/lib/utils/verifyTurnstile"
-import { Status, toApiResponse } from "@/types/api/response"
+import { ActionRespType, Status, toApiResponse } from "@/types/api/response"
 import { TenantPublic } from "@/types/entities/Tenant"
+import { BizError } from "@/types/shared/BizError"
 import { ErrorCode } from "@/types/shared/error-code"
 import { NextRequest } from "next/server"
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ tenant: string }> }) {
+
     const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "0.0.0.0"
 
     const body = await req.json()
@@ -30,20 +32,30 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ ten
         })
     }
 
-    if (!tenant_id) {
-        const { tenant } = await params
-        const tenantRes = await fetch(`${process.env.NEXT_BASE_URL}/api/${tenant}/tenant`, {
-            next: { revalidate: 3600 }
-        })
-        const { tenantId } = await assertApiSuccess<TenantPublic>(tenantRes)
-        if (!tenantId) {
-            return toApiResponse({
-                status: Status.ERROR,
-                code: ErrorCode.TENANT_NOT_FOUND,
-                httpCode: 400,
-            })
+    if (!tenant_id) { // todo: 有可能没有吗？
+        const { tenant: tenantName } = await params
+
+        try {
+            const tenant: TenantPublic = await getTenantByNameStrict(tenantName)
+            tenant_id = tenant.tenantId
+        } catch (error) {
+            const err: ActionRespType<null> =
+                error instanceof BizError
+                    ? {
+                        status: Status.ERROR,
+                        code: error.code,
+                        httpCode: error.httpCode,
+                        message: error.message,
+                    }
+                    : {
+                        status: Status.ERROR,
+                        code: 1000,
+                        httpCode: 500,
+                        message: 'Internal Server Error',
+                    }
+
+            return toApiResponse(err)
         }
-        tenant_id = tenantId
     }
 
     const { count } = await supabase
@@ -77,4 +89,5 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ ten
         code: 0,
         data: null
     })
+
 }

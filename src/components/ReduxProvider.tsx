@@ -5,6 +5,7 @@ import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { createReduxStore } from '@/redux/store/createStore'
 import { UserPublic } from '@/types/entities/User'
+import { SilentTokenRefresher } from './auth/SilentTokenRefresher'
 
 type Props = {
     tenantName: string
@@ -18,6 +19,7 @@ export default function Providers({ tenantName, userpublic, children }: Props) {
     return (
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
+                <SilentTokenRefresher tenantName={tenantName} />
                 {children}
             </PersistGate>
         </Provider>

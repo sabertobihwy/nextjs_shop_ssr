@@ -5,7 +5,7 @@ import AuthForm from "@/components/auth/AuthForm"
 import { RegisterSchema } from "@/lib/schemas/base"
 
 export default function RegisterClient() {
-    return <div className="containerM max-w-[400px] py-5 border shadow-lg">
+    return <div className="containerM w-[400px] py-5 border shadow-lg">
         <AuthForm
             schema={RegisterSchema}
             defaultValues={{ username: '', password: '', tenantName: '' }}

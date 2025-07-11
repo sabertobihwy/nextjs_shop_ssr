@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import Providers from "@/components/ReduxProvider";
 import Script from 'next/script'
 import { cookies } from "next/headers";
+import { COOKIE_PREFIX } from "@/constants/cookies";
 
 export async function generateMetadata({
   params,
@@ -33,16 +34,18 @@ export default async function RootLayout({
 }>) {
   const { tenant: tenantName } = await params
   const cookieStore = await cookies()
-  const userPublicCookie = cookieStore.get('userPublic' + tenantName)?.value
+  // 1. redux - userPublic
+  const userPublicCookie = cookieStore.get(COOKIE_PREFIX.USER_PUBLIC + tenantName.toLowerCase())?.value
   let userPublic = null
   if (userPublicCookie) {
     try {
       userPublic = JSON.parse(decodeURIComponent(userPublicCookie))
-      // console.log("Layout💧" + userPublic)
     } catch {
       userPublic = null
     }
   }
+  // 2. In Provider, async refresh access_token
+
   return (
     <html lang="en">
       <head>
