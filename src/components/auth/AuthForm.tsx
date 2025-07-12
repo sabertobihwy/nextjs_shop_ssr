@@ -20,11 +20,16 @@ import { useTenantRouter } from '@/router/useTenantRouter'
 import { useTenant } from '@/redux/hooks/useTenant'
 import Turnstile from './Turnstile'
 import { useStatus, StatusHint } from './useStatus'
+import { AuthFormMode } from '@/types/brand'
+import { LoginCartProduct } from '@/types/entities/cart'
+import { useCart } from '@/redux/hooks/useCart'
+import { uploadMergedCartClient } from '@/lib/service/client/cart'
+import { toast } from 'sonner'
 
-type AuthFormProps<S extends z.ZodTypeAny, R = null> = {
+type AuthFormProps<S extends z.ZodTypeAny, M extends AuthFormMode> = {
     schema: S
     defaultValues: z.infer<S>
-    onSubmitAction: (values: z.infer<S>) => Promise<ActionRespType<R>>
+    onSubmitAction: (values: z.infer<S>) => Promise<ActionRespType<AuthFormReturnType<M>>>
     successRedirect: string
     successMessage: string
     submitText: string
@@ -32,11 +37,15 @@ type AuthFormProps<S extends z.ZodTypeAny, R = null> = {
         href: string
         label: string
     },
+    mode: M,
     IPcheck?: boolean
 }
+type AuthFormReturnType<M extends AuthFormMode> =
+    M extends 'login' ? LoginCartProduct :
+    M extends 'register' ? null :
+    never;
 
-
-export default function AuthForm<S extends z.ZodTypeAny, R>({
+export default function AuthForm<S extends z.ZodTypeAny, M extends AuthFormMode>({
     schema,
     defaultValues,
     onSubmitAction,
@@ -44,10 +53,12 @@ export default function AuthForm<S extends z.ZodTypeAny, R>({
     successMessage,
     submitText,
     alternateLink,
+    mode,
     IPcheck
-}: AuthFormProps<S, R>) {
+}: AuthFormProps<S, M>) {
     const { tenantName, tenantId } = useTenant()
     const { tenantRedirect } = useTenantRouter()
+    const { mergeCartLocal, items: mergedCartItems } = useCart()
 
     const form = useForm<z.infer<S>>({
         resolver: zodResolver(schema),
@@ -95,15 +106,15 @@ export default function AuthForm<S extends z.ZodTypeAny, R>({
         const result = await onSubmitAction(values)
         if (result.status === Status.SUCCESS) {
             setSuccess(successMessage)
-            // if (isSafeUser(result.data)) { // for login
-            //     // todo: 应该改成login返回自动设置！
-            //     const maxAge = 60 * 60 * 24 * 7 // 秒数，7天
-            //     const expires = new Date(Date.now() + maxAge * 1000).toUTCString()
-            //     document.cookie = `userPublic${tenantName}=${encodeURIComponent(JSON.stringify(toUserPublic(result.data)))}; 
-            //     path=/; expires=${expires}; sameSite=Lax`
-
-            // }
-            setTimeout(() => tenantRedirect(`${successRedirect}`), 1000)
+            if (mode === 'login') {
+                const lcp: LoginCartProduct = result.data!
+                // cartItems can be []
+                mergeCartLocal(lcp.cartProductLst)
+                await uploadMergedCartClient(lcp.userid, tenantId, tenantName, mergedCartItems, () => {
+                    toast("upload merged cart failed") // todo: 如果失败应该是要重试的，重试又有最大次数...
+                })
+            }
+            tenantRedirect(`${successRedirect}`)
         } else {
             setError(result.message || result.code.toString())
             console.log(JSON.stringify(result, null, 2))

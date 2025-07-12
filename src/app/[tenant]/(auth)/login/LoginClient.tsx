@@ -13,6 +13,7 @@ export default function LoginPageClient() {
             successMessage="登录成功，正在跳转登录页..."
             submitText="登录"
             alternateLink={{ href: '/register', label: '没有账号？去注册' }}
+            mode={"login"}
         />
     </div>
 }   

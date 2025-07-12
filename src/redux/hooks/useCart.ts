@@ -4,7 +4,8 @@ import {
     addItem,
     plusQuantity,
     minusQuantity,
-    removeItem
+    removeItem,
+    mergeCartLocal
 } from '@/redux/features/cart/cartSlice'
 import { CartProduct } from '@/types/entities/cart'
 import { RootState } from '../store/createStore'
@@ -26,6 +27,8 @@ export const useCart = () => {
         minusQuantity: (productId: string, variant: string) =>
             dispatch(minusQuantity({ productId, variant })),
         removeItem: (productId: string, variant: string) =>
-            dispatch(removeItem({ productId, variant }))
+            dispatch(removeItem({ productId, variant })),
+        mergeCartLocal: (serverItems: CartProduct[]) =>
+            dispatch(mergeCartLocal(serverItems))
     }
 }

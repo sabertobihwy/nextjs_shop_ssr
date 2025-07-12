@@ -7,4 +7,10 @@ export type CartProduct = {
     variant: string,
     quantity: number,
     totalPrice: number
+    variantId: number
 }
+export type LoginCartProduct =
+    {
+        userid: string
+        cartProductLst: CartProduct[]
+    }

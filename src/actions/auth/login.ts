@@ -2,10 +2,12 @@
 
 import { signJwt } from "@/auth/jwt";
 import { COOKIE_PREFIX, TOKEN_EXPIRY } from "@/constants/cookies";
+import { fetchCartProducts } from "@/db/cart.dao";
 import { getTenantByNameStrict } from "@/db/tenants.dao";
 import { getUserByUserNameStrict } from "@/db/user.dao";
 import { LoginSchema } from "@/lib/schemas/base";
 import { ActionRespType, Status } from "@/types/api/response";
+import { LoginCartProduct } from "@/types/entities/cart";
 import { SafeUser, toUserPublic } from "@/types/entities/User";
 import { BizError } from "@/types/shared/BizError";
 import { ErrorCode } from "@/types/shared/error-code";
@@ -18,7 +20,7 @@ export async function LoginAction(payload: {
     username: string
     password: string
     tenantName: string
-}): Promise<ActionRespType<SafeUser>> {
+}): Promise<ActionRespType<LoginCartProduct>> {
     try {
         // 0. zod validation
         const result = LoginSchema.safeParse(payload)
@@ -89,11 +91,17 @@ export async function LoginAction(payload: {
             path: '/',
         })
 
+        // pull cart items from server 
+        const cartProductLst = await fetchCartProducts(safeUser.id, safeUser.tenant_id)
+
         // 7. 返回成功响应
         return {
             status: Status.SUCCESS,
             code: 0,
-            data: safeUser,
+            data: {
+                userid: safeUser.id,
+                cartProductLst
+            },
         }
 
     } catch (error) {

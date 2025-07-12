@@ -18,12 +18,14 @@ export default function AddCart({ product, onClickVariantHandler }: { product: P
     const [value, setValue] = useState<string | null>(() => null)
     const [price, setPrice] = useState<number>(() => product.imgList[0].price)
     const [imgurl, setImgurl] = useState<string>(() => product.imgList[0].url)
+    const [variantId, setVariantId] = useState<number>(product.imgList[0].variantId)
     const handleClick = useCallback((value: string) => {
         setValue(value)
         const index = product.typeIndexMap[value]
         onClickVariantHandler.current?.scrollToIndex(index)
         setPrice(product.imgList[index].price)
         setImgurl(product.imgList[index].url)
+        setVariantId(product.imgList[index].variantId)
     }, [setValue, onClickVariantHandler, product.typeIndexMap, product.imgList])
     const { addItem } = useCart()
     const addToCart = useCallback(() => {
@@ -32,12 +34,13 @@ export default function AddCart({ product, onClickVariantHandler }: { product: P
             name: product.name,
             price: price,
             image: imgurl,
-            variant: value!
+            variant: value!,
+            variantId: variantId!
         }
         addItem(cartItem)
         toast("successfully added into your cart ✔")
 
-    }, [product, value, addItem, imgurl, price])
+    }, [product, value, addItem, imgurl, price, variantId])
 
     return (<div className="w-full px-6 flex flex-col items-center">
         <h1 className="text-3xl py-6 self-start">Select</h1>

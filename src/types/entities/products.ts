@@ -31,7 +31,7 @@ export type ProductDetailVO = {
     tenantId: string
     name: string
     desc: string
-    imgList: { url: string; type: string; price: number }[]
+    imgList: { url: string; type: string; price: number, variantId: number }[]
     typeIndexMap: Record<string, number>
 }
 
@@ -43,6 +43,7 @@ export class ProductDetailAdaptor {
             url: variant.image_url,
             type: variant.type,
             price: Number(variant.price),
+            variantId: variant.id
         }))
 
         const typeIndexMap = imgList.reduce((map, item, index) => {
