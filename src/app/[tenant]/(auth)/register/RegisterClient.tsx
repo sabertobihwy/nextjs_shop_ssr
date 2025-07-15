@@ -1,10 +1,15 @@
 "use client"
 
 import { registerAction } from "@/actions/auth/register"
-import AuthForm from "@/components/auth/AuthForm"
+import dynamic from 'next/dynamic'
 import { RegisterSchema } from "@/lib/schemas/base"
+import RegisterSkeleton from "./RegisterSkeleton"
 
 export default function RegisterClient() {
+    const AuthForm = dynamic(() => import("@/components/auth/AuthForm"), {
+        ssr: false,
+        loading: () => <RegisterSkeleton />
+    })
     return <div className="containerM w-[400px] py-5 border shadow-lg">
         <AuthForm
             schema={RegisterSchema}
