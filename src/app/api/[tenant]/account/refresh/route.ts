@@ -57,7 +57,7 @@ export async function GET(_: Request, { params }: { params: Promise<{ tenant: st
             path: '/',
             maxAge: 0,
         })
-        res.cookies.set(`${COOKIE_PREFIX.USER_PUBLIC}${tenantKey}`, '', {
+        res.cookies.set(`${COOKIE_PREFIX.USER_SAFE}${tenantKey}`, '', {
             path: '/',
             maxAge: 0,
         })
