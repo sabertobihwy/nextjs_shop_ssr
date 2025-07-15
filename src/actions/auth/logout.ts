@@ -28,7 +28,7 @@ export async function logoutAction(formData: FormData): Promise<void> {
     })
 
     cookieStore.set({
-        name: `${COOKIE_PREFIX.USER_PUBLIC}${tenantKey}`,
+        name: `${COOKIE_PREFIX.USER_SAFE}${tenantKey}`,
         value: '',
         path: '/',
         maxAge: 0,

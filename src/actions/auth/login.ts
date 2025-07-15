@@ -8,7 +8,7 @@ import { getUserByUserNameStrict } from "@/db/user.dao";
 import { LoginSchema } from "@/lib/schemas/base";
 import { ActionRespType, Status } from "@/types/api/response";
 import { LoginCartProduct } from "@/types/entities/cart";
-import { SafeUser, toUserPublic } from "@/types/entities/User";
+import { SafeUser } from "@/types/entities/User";
 import { BizError } from "@/types/shared/BizError";
 import { ErrorCode } from "@/types/shared/error-code";
 import bcrypt from "bcryptjs";
@@ -84,10 +84,10 @@ export async function LoginAction(payload: {
             maxAge: TOKEN_EXPIRY.REFRESH_TOKEN.COOKIE,
         })
 
-        const userPublicStr = JSON.stringify(toUserPublic(safeUser))
-        cookieStore.set(`${COOKIE_PREFIX.USER_PUBLIC}${tenantKey}`, userPublicStr, {
+        const safeUserStr = JSON.stringify(safeUser)
+        cookieStore.set(`${COOKIE_PREFIX.USER_SAFE}${tenantKey}`, safeUserStr, {
             httpOnly: false,
-            maxAge: TOKEN_EXPIRY.USER_PUBLIC.COOKIE,
+            maxAge: TOKEN_EXPIRY.USER_SAFE.COOKIE,
             path: '/',
         })
 

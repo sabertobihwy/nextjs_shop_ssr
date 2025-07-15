@@ -34,14 +34,14 @@ export default async function RootLayout({
 }>) {
   const { tenant: tenantName } = await params
   const cookieStore = await cookies()
-  // 1. redux - userPublic
-  const userPublicCookie = cookieStore.get(COOKIE_PREFIX.USER_PUBLIC + tenantName.toLowerCase())?.value
-  let userPublic = null
-  if (userPublicCookie) {
+  // 1. redux - userSafe
+  const userSafeCookie = cookieStore.get(COOKIE_PREFIX.USER_SAFE + tenantName.toLowerCase())?.value
+  let userSafe = null
+  if (userSafeCookie) {
     try {
-      userPublic = JSON.parse(decodeURIComponent(userPublicCookie))
+      userSafe = JSON.parse(decodeURIComponent(userSafeCookie))
     } catch {
-      userPublic = null
+      console.log(`json parse userSafeCookie failed`)
     }
   }
   // 2. In Provider, async refresh access_token
@@ -56,7 +56,7 @@ export default async function RootLayout({
         />
       </head>
       <body>
-        <Providers tenantName={tenantName} userpublic={userPublic}>
+        <Providers tenantName={tenantName} userSafe={userSafe}>
           <Header />
           {children}
           <Footer />

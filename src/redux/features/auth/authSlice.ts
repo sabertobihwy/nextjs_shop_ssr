@@ -1,9 +1,9 @@
 // store/slices/authSlice.ts
-import { UserPublic } from '@/types/entities/User'
+import { SafeUser } from '@/types/entities/User'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 type AuthState = {
-    user: UserPublic | null
+    user: SafeUser | null
 }
 
 const initialState: AuthState = {
@@ -14,7 +14,7 @@ const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        setUser(state, action: PayloadAction<UserPublic>) {
+        setUser(state, action: PayloadAction<SafeUser>) {
             state.user = action.payload
         },
         clearUser(state) {

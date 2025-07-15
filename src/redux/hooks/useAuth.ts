@@ -1,8 +1,8 @@
 // hooks/useAuth.ts
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../store/createStore'
-import { UserPublic } from '@/types/entities/User'
 import { clearUser, setUser } from '../features/auth/authSlice'
+import { SafeUser } from '@/types/entities/User'
 
 
 export const useAuth = () => {
@@ -11,7 +11,7 @@ export const useAuth = () => {
 
     return {
         user,
-        setUser: (u: UserPublic) => dispatch(setUser(u)),
+        setUser: (u: SafeUser) => dispatch(setUser(u)),
         clearUser: () => dispatch(clearUser()),
     }
 }

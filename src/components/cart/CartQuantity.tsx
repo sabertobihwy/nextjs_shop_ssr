@@ -4,7 +4,7 @@ import { Trash2 } from 'lucide-react';
 import { CirclePlus, CircleMinus } from 'lucide-react';
 import { Input } from "@/components/ui/input"
 import { useMemo } from "react";
-import { useCart } from '@/redux/hooks/useCart';
+import { useCart } from "@/redux/hooks/useCart";
 
 function useCartItemActions(id: string, variant: string) {
     const { plusQuantity, minusQuantity, removeItem } = useCart()

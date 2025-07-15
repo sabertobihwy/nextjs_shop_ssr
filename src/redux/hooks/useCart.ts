@@ -17,10 +17,9 @@ export const useCart = () => {
     const totalCount = useSelector((state: RootState) => state.cart.totalCount)
     const totalPrice = useSelector((state: RootState) => state.cart.totalPrice)
 
-    return {
-        items,
-        totalCount,
-        totalPrice,
+    const cartState = { items, totalCount, totalPrice }
+
+    const cartActions = {
         addItem: (item: Omit<CartProduct, 'quantity' | 'totalPrice'>) => dispatch(addItem(item)),
         plusQuantity: (productId: string, variant: string) =>
             dispatch(plusQuantity({ productId, variant })),
@@ -29,6 +28,8 @@ export const useCart = () => {
         removeItem: (productId: string, variant: string) =>
             dispatch(removeItem({ productId, variant })),
         mergeCartLocal: (serverItems: CartProduct[]) =>
-            dispatch(mergeCartLocal(serverItems))
+            dispatch(mergeCartLocal(serverItems)),
     }
+
+    return { ...cartState, ...cartActions }
 }

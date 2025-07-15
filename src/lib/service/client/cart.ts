@@ -37,3 +37,27 @@ export async function uploadMergedCartClient(
         errorCallback?.();
     }
 }
+
+// key 是 `${userId}_${tenantId}`
+const timers: Record<string, NodeJS.Timeout> = {}
+
+export function debounceUploadCart(
+    userId: string,
+    tenantId: string,
+    tenantName: string,
+    cartMap: Record<string, CartProduct[]>,
+    errorCallback?: () => void,
+    delay = 2000
+) {
+    const key = `${userId}_${tenantId}`
+
+    // 如果已有定时器，清除
+    if (timers[key]) clearTimeout(timers[key])
+
+    // 设置新定时器
+    timers[key] = setTimeout(() => {
+        console.log(`🌀 Debounced upload for ${key}`)
+        uploadMergedCartClient(userId, tenantId, tenantName, cartMap, errorCallback)
+        delete timers[key] // 清除引用
+    }, delay)
+}
