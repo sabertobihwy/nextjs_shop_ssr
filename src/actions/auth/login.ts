@@ -2,9 +2,9 @@
 
 import { signJwt } from "@/auth/jwt";
 import { COOKIE_PREFIX, TOKEN_EXPIRY } from "@/constants/cookies";
-import { fetchCartProducts } from "@/db/cart.dao";
-import { getTenantByNameStrict } from "@/db/tenants.dao";
-import { getUserByUserNameStrict } from "@/db/user.dao";
+import { fetchCartProducts } from "@/lib/dao/cart";
+import { getTenantByName } from "@/lib/dao/tenants";
+import { getUserByUserNameStrict } from "@/lib/dao/user";
 import { LoginSchema } from "@/lib/schemas/base";
 import { ActionRespType, Status } from "@/types/api/response";
 import { LoginCartProduct } from "@/types/entities/cart";
@@ -29,11 +29,12 @@ export async function LoginAction(payload: {
         }
         const { username, password, tenantName } = result.data
 
-        // 1. 查找租户
-        const tenant = await getTenantByNameStrict(tenantName)
+        // 1. 查找租户, 应该进化成 BFF层；现在login这应该是 SSR级别
+        const tenant = await getTenantByName(tenantName)
+        if (!tenant) throw new BizError(ErrorCode.TENANT_NOT_FOUND, 404)
 
         // 2. 查找用户
-        const user = await getUserByUserNameStrict(username, tenant.tenantId)
+        const user = await getUserByUserNameStrict(username, tenant.id)
 
         const isValid = await bcrypt.compare(password, user.password)
         if (!isValid) throw new BizError(ErrorCode.INVALID_PASSWORD, 401)

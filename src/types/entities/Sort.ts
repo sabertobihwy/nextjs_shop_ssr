@@ -1,3 +1,6 @@
-import { SORTLIST } from "@/constants/sortList";
-
-export type SortValue = typeof SORTLIST[number]["valueName"]
+export enum SortValue {
+    Default = '',
+    Latest = "latest",
+    PriceAsc = "price-asc",
+    PriceDesc = "price-desc",
+}

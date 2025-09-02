@@ -104,37 +104,6 @@ const cartSlice = createSlice({
             state.totalCount -= target.quantity
             state.totalPrice -= target.quantity * target.price
         },
-        // mergeCartLocal: (state, action: PayloadAction<CartProduct[]>) => {
-        //     if (action.payload.length === 0) return
-        //     for (const incoming of action.payload) {
-        //         const productId = incoming.id.toString();
-        //         const list: CartProduct[] = state.items[productId] || [];
-
-        //         const index = list.findIndex(p => p.variantId === incoming.variantId);
-
-        //         let newList: CartProduct[];
-
-        //         if (index !== -1) {
-        //             const existing = list[index];
-        //             const newQuantity = existing.quantity + incoming.quantity;
-        //             newList = [...list];
-        //             newList[index] = {
-        //                 ...existing,
-        //                 quantity: newQuantity,
-        //                 totalPrice: existing.price * newQuantity
-        //             };
-        //         } else {
-        //             newList = [...list, {
-        //                 ...incoming,
-        //                 totalPrice: incoming.price * incoming.quantity
-        //             }];
-        //         }
-
-        //         state.items[productId] = newList;
-        //         state.totalCount += incoming.quantity;
-        //         state.totalPrice += incoming.price * incoming.quantity;
-        //     }
-        // }
         mergeCartLocal: (state, action: PayloadAction<CartProduct[]>) => {
             if (action.payload.length === 0) return;
 

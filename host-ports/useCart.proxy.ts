@@ -1,0 +1,1 @@
+export { useCart } from '@/redux/hooks/useCart';

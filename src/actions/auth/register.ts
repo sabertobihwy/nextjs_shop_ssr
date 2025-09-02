@@ -2,8 +2,8 @@
 
 import bcrypt from 'bcryptjs'
 import { ActionRespType, Status } from '@/types/api/response'
-import { getTenantByNameStrict } from '@/db/tenants.dao'
-import { createUser, getUserByUserName } from '@/db/user.dao'
+import { getTenantByNameStrict } from '@/lib/dao/tenants.dao'
+import { createUser, getUserByUserName } from '@/lib/dao/user.dao'
 import { BizError } from '@/types/shared/BizError'
 import { ErrorCode } from '@/types/shared/error-code'
 import { NonEmptyString } from '@/types/brand'

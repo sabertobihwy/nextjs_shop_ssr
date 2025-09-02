@@ -1,4 +1,4 @@
-// redux/hooks/useCart.ts
+// // redux/hooks/useCart.ts
 import { useDispatch, useSelector } from 'react-redux'
 import {
     addItem,
@@ -13,9 +13,9 @@ import { RootState } from '../store/createStore'
 export const useCart = () => {
     const dispatch = useDispatch()
 
-    const items = useSelector((state: RootState) => state.cart.items)
-    const totalCount = useSelector((state: RootState) => state.cart.totalCount)
-    const totalPrice = useSelector((state: RootState) => state.cart.totalPrice)
+    const items: Record<string, CartProduct[]> = useSelector((state: RootState) => state.cart.items)
+    const totalCount: number = useSelector((state: RootState) => state.cart.totalCount)
+    const totalPrice: number = useSelector((state: RootState) => state.cart.totalPrice)
 
     const cartState = { items, totalCount, totalPrice }
 

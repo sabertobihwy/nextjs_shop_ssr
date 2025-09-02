@@ -1,4 +1,4 @@
-import { getTenantByNameStrict } from "@/db/tenants.dao"
+import { getTenantService } from "@/lib/service/server/tenant/getTenantService"
 import { ActionRespType, Status, toApiResponse } from "@/types/api/response"
 import { TenantPublic } from "@/types/entities/Tenant"
 import { BizError } from "@/types/shared/BizError"
@@ -8,14 +8,12 @@ export async function GET(req: Request, { params }: { params: Promise<{ tenant: 
     try {
         const { tenant: tenantName } = await params
         console.log('======getTenantByNameStrict=====,tenantName:' + tenantName)
-        const data: TenantPublic = await getTenantByNameStrict(tenantName)
-
-        const resp: ActionRespType<typeof data> = {
+        const tenantPublic: TenantPublic = await getTenantService(tenantName)
+        const resp: ActionRespType<typeof tenantPublic> = {
             status: Status.SUCCESS,
             code: 0,
-            data,
+            data: tenantPublic,
         }
-
         return toApiResponse(resp)
     } catch (error) {
         const err: ActionRespType<null> =

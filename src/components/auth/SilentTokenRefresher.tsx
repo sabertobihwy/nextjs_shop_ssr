@@ -1,5 +1,5 @@
 'use client'
-
+import React from 'react'
 import { useEffect, useRef } from 'react'
 import { toast, Toaster } from 'sonner'
 import { useAuth } from '@/redux/hooks/useAuth'
@@ -16,7 +16,7 @@ export function SilentTokenRefresher({ tenantName }: { tenantName: string }) {
 
         const refreshFn = async () => {
 
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/${tenantName}/account/refresh`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/${tenantName}/shop/account/refresh`, {
                 credentials: 'include',
             })
 

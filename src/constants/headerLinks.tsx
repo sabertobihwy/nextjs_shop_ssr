@@ -4,9 +4,10 @@ import { CircleUserRound } from 'lucide-react';
 import CustomCartLink from '@/components/CustomCartLink';
 
 export type HeaderLinkItem = {
-    href: string;
-    name: string;
-    icon?: ReactNode;
+    href: string,
+    name: string,
+    icon?: ReactNode,
+    className?: string,
     render?: ReactElement<{ href: string; name: string }>; // 若存在，则跳过默认渲染
 };
 export const HEADERLINK: HeaderLinkItem[] = [

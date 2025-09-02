@@ -41,6 +41,7 @@ export const errorMessageMap: Record<ErrorCode, string> = {
     [ErrorCode.INVALID_INPUT]: "INVALID_INPUT",
     [ErrorCode.IP_EXCEED_LIMIT]: "IP_EXCEED_LIMIT",
     [ErrorCode.DATABASE_ERROR]: "DATABASE_ERROR",
-    [ErrorCode.Turnstile_TOKEN_MISSING]: "Turnstile_TOKEN_MISSING"
+    [ErrorCode.Turnstile_TOKEN_MISSING]: "Turnstile_TOKEN_MISSING",
+    [ErrorCode.THEME_NOT_FOUND]: ""
 }
 

@@ -5,7 +5,7 @@ import { SignOptions } from "jsonwebtoken";
 export const COOKIE_PREFIX = {
     ACCESS_TOKEN: 'acc_tok_',
     REFRESH_TOKEN: 'ref_tok_',
-    USER_SAFE: 'userpub_',
+    USER_SAFE: 'userpub_'
 }
 
 type StringValue = SignOptions['expiresIn']
