@@ -23,7 +23,7 @@
     },
     "types": ["es-module-shims"]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "host-ports/services.js"],
   "exclude": ["node_modules"],
   
 }

@@ -7,6 +7,7 @@ import { BizError } from "@/types/shared/BizError"
 import { loadTenantOrRedirect } from "@/lib/ssr/loadTenantOrRedirect"
 import { loadThemeOrRedirect } from "@/lib/ssr/loadThemeOrRedirect"
 import ShopController from "@/app/[tenant]/shop/ShopController"
+import { buildShopView } from "@/lib/service/server/products/buildShopView"
 
 export const revalidate = 3600 // page cache 
 
@@ -38,10 +39,13 @@ export default async function Page({ params }: { params: Promise<{ tenant: strin
         const result: GetProductsOutput = await getProductsService({ tenantId: tenantId as string & UUIDString, includeMeta: true })
         // in client component, lazy import theme-shop-main, get component along with schema, let schema.parse(props) to test by zod.
         //console.log('sectionProps: ' + displayDefaultProps)
-        return <ShopController tenant={{
-            tenantId,
-            tenantName
-        }} sectionProps={displayDefaultProps} productData={result} themeName={themeOptions.themeName} />
+        return <ShopController
+            tenant={{ tenantId, tenantName }}
+            sectionProps={displayDefaultProps}
+            themeName={themeOptions.themeName}
+            initialView={buildShopView(result, 1, tenantName)}
+            categoriesMeta={result.meta?.categories ?? []}   // 👈 新增：侧栏拼装的元数据
+        />
     } catch (error) {
         console.log(error instanceof BizError ? `BizError ${error.code}: ${error.message}` : 'unknown error')
         redirect(`/not-found?httpcode=500`);

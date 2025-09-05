@@ -59,7 +59,8 @@ export function buildImportMap(vendor: VendorManifestV2, cdnUrl: CdnFn, opts?: {
         'react': reactProxy,
         'react/jsx-runtime': jsxProxy,
         'react-redux': reduxProxy,
-        '@ss/useCart': "/externals/useCart.mjs" // todo
+        '@ss/useCart': "/externals/useCart.mjs", // todo
+        '@ss/services': '/externals/services.mjs',
     };
 
     for (const spec of needCdn) {

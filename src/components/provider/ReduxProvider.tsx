@@ -1,14 +1,13 @@
 'use client'
 
-import { ReactNode, useRef } from 'react'
+import { ReactNode, useEffect, useRef } from 'react'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { createReduxStore } from '@/redux/store/createStore'
 import { ThemeOptionsEntity } from '@/types/entities/Theme'
-import { ImageProvider } from '@/lib/theme-loader/template-system/ImageHelper/ImageProvider'
-import { NextImageAdapter } from '@/lib/theme-loader/template-system/ImageHelper/NextImageAdapter'
-import { LinkProvider } from '@/lib/theme-loader/template-system/LinkHelper/LinkProvider'
-import { NextLinkAdapter } from '@/lib/theme-loader/template-system/LinkHelper/NextLinkAdapter'
+import { getVersion, provided, register } from '@ss/services';
+import { NextLinkImplApi } from '@/lib/theme-loader/template-system/services/NextLink'
+import { NextImageImplApi } from '@/lib/theme-loader/template-system/services/NextImage'
 
 type Props = {
     tenantName: string
@@ -30,15 +29,23 @@ export default function Providers({ tenantName, tenantId, themeOptions, themeCdn
     }
     const { store, persistor } = storeBundleRef.current;
 
+    useEffect(() => {
+        // 1) 注册（幂等、允许 HMR 覆盖）
+        register({ link: NextLinkImplApi, image: NextImageImplApi });
+
+        // 2) 标记 & 广播
+        (window as any).__SS_SERVICES_READY__ = true;
+        const detail = { provided: provided(), version: getVersion(), ts: Date.now() };
+        window.dispatchEvent(new CustomEvent('ss-services:ready', { detail }));
+
+        console.log('[services] ready', detail);
+    }, []);
+
     return (
         <Provider store={store}>
-            <ImageProvider value={NextImageAdapter}>
-                <LinkProvider value={NextLinkAdapter}>
-                    <PersistGate loading={null} persistor={persistor}>
-                        {children}
-                    </PersistGate>
-                </LinkProvider>
-            </ImageProvider>
+            <PersistGate loading={null} persistor={persistor}>
+                {children}
+            </PersistGate>
         </Provider>
     )
 }

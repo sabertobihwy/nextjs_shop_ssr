@@ -5,79 +5,70 @@ export type WaitOpts = {
 
 function hasReactGlobal() {
     return typeof window !== 'undefined'
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         && (window as any).__REACT__
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         && (window as any).__REACT_JSX__
 }
 
+function hasServicesGlobal() {
+    return typeof window !== 'undefined'
+        && (window as any).__SS_SERVICES_READY__ === true
+}
+
 // 单例承诺：多次并发等待只挂一次监听
-let reactReadyPromise: Promise<void> | null = null
+let reactAndServicesReadyPromise: Promise<void> | null = null
 
 export function waitForReactGlobal(opts: WaitOpts = {}): Promise<void> {
     if (typeof window === 'undefined') return Promise.resolve()
-    if (hasReactGlobal()) return Promise.resolve()
+    if (hasReactGlobal() && hasServicesGlobal()) return Promise.resolve()
+    if (!reactAndServicesReadyPromise) {
+        reactAndServicesReadyPromise = new Promise<void>((resolve, reject) => {
+            let rafId: number | null = null
+            let timeoutId: number | null = null
+            let reactOk = hasReactGlobal()
+            let servicesOk = hasServicesGlobal()
 
-    if (!reactReadyPromise) {
-        reactReadyPromise = new Promise<void>((resolve, reject) => {
-            const onReady = () => {
-                if (hasReactGlobal()) {
-                    cleanup()
-                    resolve()
-                }
-            }
-            const onAbort = () => {
-                cleanup()
-                reject(new Error('[waitForReactGlobal] aborted'))
-            }
+            const bothOk = () => reactOk && servicesOk
 
             const cleanup = () => {
-                window.removeEventListener('react-ready', onReady)
+                window.removeEventListener('react-ready', onReactReady)
+                window.removeEventListener('ss-services:ready', onServicesReady)
                 if (rafId != null) cancelAnimationFrame(rafId)
                 if (timeoutId != null) clearTimeout(timeoutId)
-                if (opts.signal) opts.signal.removeEventListener('abort', onAbort)
-                reactReadyPromise = null
+                opts.signal?.removeEventListener('abort', onAbort)
+                reactAndServicesReadyPromise = null
             }
 
-            // 1) 事件优先（Bridge 发出的）
-            window.addEventListener('react-ready', onReady, { once: true })
+            const tryResolve = () => { if (bothOk()) { cleanup(); resolve() } }
 
-            // 2) rAF 轮询兜底（避免事件丢失或脚本顺序微妙）
-            let rafId: number | null = null
+            const onReactReady = () => { reactOk = hasReactGlobal(); tryResolve() }
+            const onServicesReady = () => { servicesOk = hasServicesGlobal(); tryResolve() }
+            const onAbort = () => { cleanup(); reject(new Error('[waitForReactGlobal] aborted (services)')) }
+
+            // 1) 事件优先
+            window.addEventListener('react-ready', onReactReady, { once: true })
+            window.addEventListener('ss-services:ready', onServicesReady, { once: true })
+
+            // 2) rAF 仅用于 React（services 事件足够）
             const tick = () => {
-                if (hasReactGlobal()) { onReady(); return }
-                rafId = requestAnimationFrame(tick)
+                if (!reactOk) { reactOk = hasReactGlobal() }
+                if (!servicesOk) { servicesOk = hasServicesGlobal() } // 防止事件被错过
+                if (bothOk()) {
+                    tryResolve()
+                } else {
+                    rafId = requestAnimationFrame(tick)
+                }
+
             }
             rafId = requestAnimationFrame(tick)
 
-            // 3) 可选超时
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            let timeoutId: any = null
+            // 3) 超时
             if (opts.timeoutMs && opts.timeoutMs > 0) {
-                timeoutId = setTimeout(() => {
-                    cleanup()
-                    reject(new Error('[waitForReactGlobal] timeout'))
-                }, opts.timeoutMs)
+                timeoutId = window.setTimeout(() => { cleanup(); reject(new Error('[waitForReactGlobal] timeout (services)')) }, opts.timeoutMs)
             }
 
-            // 4) 可选 AbortSignal
-            if (opts.signal) opts.signal.addEventListener('abort', onAbort, { once: true })
+            // 4) Abort
+            opts.signal?.addEventListener('abort', onAbort, { once: true })
         })
     }
-    return reactReadyPromise
+    return reactAndServicesReadyPromise
 }
-
-// function waitForReactGlobal_Simple(): Promise<void> {
-//     if (typeof window === 'undefined') return Promise.resolve();
-//     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//     if ((window as any).__REACT__ && (window as any).__REACT_JSX__) return Promise.resolve();
-//     return new Promise((resolve) => {
-//         const t = setInterval(() => {
-//             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//             if ((window as any).__REACT__ && (window as any).__REACT_JSX__) {
-//                 clearInterval(t);
-//                 resolve();
-//             }
-//         }, 0); // 微任务级轮询即可
-//     });
-// }

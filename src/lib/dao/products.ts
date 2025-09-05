@@ -82,9 +82,6 @@ export async function getAllProductsByParams({
     const totalCount = await prisma.products.count({ where })
     const totalPage = Math.ceil(totalCount / pageSize)
 
-    // console.log(`😭入参是：${tenantId}${page}${pageSize}${categoryId}${sortTag}${subIds}`)
-    // console.log(`结果是 ${JSON.stringify(products)}`)
-
     return { products, totalCount, totalPage }
 }
 

@@ -1,5 +1,6 @@
 // app/api/products/route.ts
 
+import { buildShopView, ShopViewLite } from "@/lib/service/server/products/buildShopView"
 import { GetProductsOutput, getProductsService } from "@/lib/service/server/products/productService"
 import { ActionRespType, Status, toApiResponse } from "@/types/api/response"
 import { UUIDString } from "@/types/brand"
@@ -7,19 +8,20 @@ import { SortValue } from "@/types/entities/Sort"
 import { BizError } from "@/types/shared/BizError"
 import { ErrorCode } from "@/types/shared/error-code"
 import { NextResponse } from "next/server"
-//  react-query弃用 该方法
+
 export async function GET(req: Request): Promise<NextResponse> {
     try {
         const { searchParams } = new URL(req.url)
         const tenantId = searchParams.get('tenantId')
+        const tenantName = searchParams.get('tenantName')
         const page = Number(searchParams.get('page'))
         const categoryId = searchParams.get('categoryId')
         const subIds = searchParams.get("subIds")?.split(",").map(Number) ?? [];
-        const sortTag = searchParams.get("sortTag") as SortValue
+        const sortTag = searchParams.get("sortTag") as SortValue ?? 'Default'
 
         console.log({ tenantId, page, categoryId, subIds, sortTag });
 
-        if (!tenantId) {
+        if (!tenantId || !tenantName) {
             throw new BizError(ErrorCode.TENANT_NOT_FOUND, 404)
         }
 
@@ -32,10 +34,12 @@ export async function GET(req: Request): Promise<NextResponse> {
             includeMeta: false, // CSR ,不需要查categories
         });
 
-        const resp: ActionRespType<GetProductsOutput> = {
+        const view: ShopViewLite = buildShopView(data, page, tenantName)
+
+        const resp: ActionRespType<ShopViewLite> = {
             status: Status.SUCCESS,
             code: 0,
-            data,
+            data: view,
         }
 
         return toApiResponse(resp)

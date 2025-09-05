@@ -126,9 +126,9 @@ export type ShopSidebarContentProps = {
     selectedCategoryId: number | null;           // 当前顶级类目（null = View All）
 }
 
-export function toShopCardContent(data: ProductBaseDTO[]): ShopCardContent[] {
+export function toShopCardContent(data: ProductBaseDTO[], tenantName: string): ShopCardContent[] {
     return data.map((p) => ({
-        linkHref: `./shop/detail/${p.id}`,
+        linkHref: `/${tenantName}/shop/detail/${p.id}`,
         image: p.min_price_img_url,
         title: p.name,
         description: p.description,

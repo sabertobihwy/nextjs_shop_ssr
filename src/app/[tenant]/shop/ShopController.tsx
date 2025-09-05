@@ -1,25 +1,23 @@
 // ShopPageClient.tsx —— 父容器：状态 + 触发条件，数据交给 React Query
 "use client";
-import { useProductsQuery, useSubcatsQuery } from "@/hooks/shopDisplayProducts";
-import { GetProductsOutput } from "@/lib/service/server/products/productService";
+import { useShopViewQuery, useSubcatsQuery } from "@/hooks/shopDisplayProducts";
 import * as React from "react";
 import ShopRemoteContainer from "../../../containers/ShopRemoteContainer";
 import { useTheme } from "@/redux/hooks/useTheme";
 import { generateCdn_theme_url } from "@/constants/theme";
-import { buildSidebarContent, toShopCardContent } from "@/types/entities/products";
+import { buildSidebarContent, Category } from "@/types/entities/products";
 import { SortValue } from "@/types/entities/Sort";
+import { ShopViewLite } from "@/lib/service/server/products/buildShopView";
 
 type Props = {
-    tenant: {
-        tenantId: string,
-        tenantName: string
-    }
+    tenant: { tenantId: string; tenantName: string }
     sectionProps: unknown
-    productData: GetProductsOutput
     themeName: string
+    initialView: ShopViewLite
+    categoriesMeta: Category[]
 }
 
-export default function ShopController({ tenant, sectionProps, productData, themeName }: Props) {
+export default function ShopController({ tenant, sectionProps, themeName, initialView, categoriesMeta }: Props) {
     // 本地状态只存“条件”，不再手动发请求
     const [selectedCatId, setSelectedCatId] = React.useState<number | null>(null);
     const [selectedSubIds, setSelectedSubIds] = React.useState<number[]>([]);
@@ -32,46 +30,43 @@ export default function ShopController({ tenant, sectionProps, productData, them
 
     // 商品查询：条件 -> queryKey，交给 React Query
     const {
-        data: productOutput,
+        data: viewQ,
         isFetching: isFetchingProducts // isPlaceholderData 用来干嘛的？
-    } = useProductsQuery({
-        tenant,
-        catId: selectedCatId,
-        subIds: selectedSubIds,
-        page,
-        sortTag,
-        initialProducts: productData,  // 首屏注水
-    });
+    } = useShopViewQuery({
+        tenant, catId: selectedCatId, subIds: selectedSubIds, page, sortTag,
+        initialView, // 仅在 SSR 场景注水
+    })
+    // 轻量拼 sidebar（用 memo 防抖）
+    const sidebar = React.useMemo(
+        () => buildSidebarContent(
+            categoriesMeta,
+            selectedCatId,
+            selectedSubIds,
+            subcats ?? []
+        ),
+        // 子类列表变更、选择变更才重算
+        [categoriesMeta, selectedCatId, selectedSubIds, subcats]
+    )
 
     // 交互：点“大类”
-    function onCategorySelect(catId: number | null) {
-        setSelectedCatId(catId);
-        setSelectedSubIds([]);    // 清空子类选择
-        setPage(1);
-    }
+    const onCategorySelect = React.useCallback((catId: number | null) => {
+        setSelectedCatId(catId); setSelectedSubIds([]); setPage(1)
+    }, [])
 
     // 交互：勾选子类
-    function onSubToggle(id: number, checked: boolean) {
-        setSelectedSubIds(prev => {
-            const next = checked ? [...prev, id] : prev.filter(x => x !== id);
-            return next;
-        });
-        setPage(1);
-    }
+    const onSubToggle = React.useCallback((id: number, checked: boolean) => {
+        setSelectedSubIds(prev => checked ? [...prev, id] : prev.filter(x => x !== id)); setPage(1)
+    }, [])
 
     // 3) 排序交互：切换排序并回到第一页
-    function onSortChange(next: typeof sortTag) {
-        if (next === sortTag) return;  // 同值不触发
-        setSortTag(next);
-        setPage(1);
-    }
+    const onSortChange = React.useCallback((next: SortValue) => {
+        if (next !== sortTag) { setSortTag(next); setPage(1) }
+    }, [sortTag])
 
     // 4) 翻页交互：只改页码（可选加边界判断）
-    function onPageChange(next: number) {
-        if (!Number.isInteger(next) || next < 1) return;   // 简单防御
-        if (next === page) return;                          // 同页不触发
-        setPage(next);
-    }
+    const onPageChange = React.useCallback((next: number) => {
+        if (Number.isInteger(next) && next > 0 && next !== page) setPage(next)
+    }, [page])
 
     const { themeCdnMap } = useTheme()
     const url = generateCdn_theme_url(themeCdnMap[`${themeName}-shop-main`])
@@ -80,16 +75,10 @@ export default function ShopController({ tenant, sectionProps, productData, them
         url,
         validateProps: sectionProps,
         dbProps: {
-            cardItems: toShopCardContent(productOutput?.products ?? []),
-            sidebar: buildSidebarContent(productData.meta?.categories, selectedCatId, selectedSubIds, subcats ?? []),
-            pagination: {
-                currentStart: page,
-                currentEnd: productOutput?.totalPage ?? page,
-                total: productOutput?.totalCount ?? 0,
-                showPrevious: page > 1,
-                showNext: page < (productOutput?.totalPage ?? page),
-            },
-            totalItems: productOutput?.totalCount ?? 0
+            cardItems: viewQ!.cardItems,
+            sidebar,
+            pagination: viewQ!.pagination,
+            totalItems: viewQ!.totalItems
         },
         state: {
             isFetchingProducts,
