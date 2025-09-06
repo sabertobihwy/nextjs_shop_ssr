@@ -27,6 +27,11 @@ declare module '@ss/services' {
         priority?: boolean;
         placeholder?: 'blur' | 'empty';
         blurDataURL?: string;
+        wrapperClassName?: string;
+        /** 没有 width/height 且也不想自己包容器时，用 ratio 告诉适配器 */
+        ratio?: `${number}/${number}` | number
+        /** 逃生阀：强制不包裹 */
+        noWrapper?: boolean
     };
 
     export type ImageApi = {
