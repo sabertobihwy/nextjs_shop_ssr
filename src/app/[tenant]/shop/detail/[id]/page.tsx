@@ -7,6 +7,13 @@ import ShopDetailController from "./ShopDetailController";
 export const revalidate = 3600;
 
 export default async function Page({ params }: { params: Promise<{ id: string, tenant: string }> }) {
+    // test
+    // const wait5s = new Promise<void>((resolve) => {
+    //     setTimeout(resolve, 5000);
+    // });
+
+    // await wait5s;
+    // console.log("5 秒结束啦");
 
     const { id, tenant: tenantName } = await params
     const tenantRes = await fetch(`${process.env.NEXT_BASE_URL}/api/${tenantName}/tenant`, {

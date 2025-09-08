@@ -1,97 +1,67 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function ShopDetailSkeleton() {
-    return (<div className="flex h-[100dvh] overflow-hidden">
-        {/* Content area */}
-        <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-            <main className="grow">
-                <div className="px-4 sm:px-6 lg:px-8 py-8 w-full">
-                    {/* Page content */}
-                    <div className="max-w-5xl mx-auto flex flex-col lg:flex-row lg:space-x-8 xl:space-x-16">
-                        {/* Left: Content */}
-                        <div className="flex-1">
-                            {/* Back link */}
-                            <div className="mb-3">
-                                <Skeleton className="h-4 w-40" />
-                            </div>
+    return (<div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden bg-[var(--main-bg)]" >
+        <main className="grow">
+            <div className="px-4 sm:px-6 lg:px-8 py-8 w-full">
+                {/* Page content */}
+                <div className="max-w-5xl mx-auto flex flex-col lg:flex-row lg:space-x-8 xl:space-x-16">
 
-                            {/* Header */}
-                            <header className="mb-4 space-y-2">
-                                <Skeleton className="h-8 w-3/4" />
-                                <Skeleton className="h-4 w-2/3" />
-                            </header>
-
-                            {/* Image */}
-                            <figure className="mb-6">
-                                <Skeleton className="h-[360px] w-full rounded-xs" />
-                            </figure>
-
-                            {/* Product content */}
-                            <div className="space-y-4">
-                                <Skeleton className="h-6 w-44" />
-                                <div className="space-y-2">
-                                    <Skeleton className="h-4 w-full" />
-                                    <Skeleton className="h-4 w-11/12" />
-                                    <Skeleton className="h-4 w-10/12" />
-                                </div>
-
-                                {/* list bullets */}
-                                <div className="space-y-2">
-                                    {[...Array(4)].map((_, i) => (
-                                        <div key={i} className="flex items-center gap-3">
-                                            <Skeleton className="h-3 w-3 rounded-full" />
-                                            <Skeleton className="h-4 w-2/3" />
-                                        </div>
-                                    ))}
-                                </div>
-
-                                {/* blockquote */}
-                                <Skeleton className="h-20 w-full" />
-                            </div>
-
-                            {/* Divider */}
-                            <div className="my-6">
-                                <Skeleton className="h-px w-full" />
-                            </div>
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                        {/* Back link */}
+                        <div className="mb-5">
+                            <Skeleton className="h-4 w-40 rounded-md" />
                         </div>
 
-                        {/* Right: Sidebar */}
-                        <aside className="mt-8 lg:mt-0">
-                            <div className="p-5 shadow-xs rounded-xl lg:w-72 xl:w-80 border">
-                                <div className="mb-3 flex justify-center">
-                                    <Skeleton className="h-5 w-40" />
-                                </div>
+                        {/* Title + Desc */}
+                        <header className="mb-6">
+                            <Skeleton className="h-8 w-2/3 mb-4 rounded-md" />
+                            <Skeleton className="h-4 w-1/2 rounded-md" />
+                        </header>
 
-                                {/* package options */}
-                                <ul className="space-y-2 sm:flex sm:space-y-0 sm:space-x-2 lg:space-y-2 lg:space-x-0 lg:flex-col mb-4">
-                                    {[0, 1, 2].map((i) => (
-                                        <li key={i} className="w-full">
-                                            <div className="w-full rounded-lg border p-4 shadow-xs">
-                                                <div className="mb-2 flex items-center justify-between">
-                                                    <Skeleton className="h-5 w-24" />
-                                                    <Skeleton className="h-5 w-16" />
-                                                </div>
-                                                <Skeleton className="h-4 w-3/4" />
-                                            </div>
-                                        </li>
-                                    ))}
-                                </ul>
-
-                                {/* buy button */}
-                                <div className="mb-4">
-                                    <Skeleton className="h-10 w-full rounded-md" />
-                                </div>
-
-                                {/* terms text */}
-                                <div className="space-y-2">
-                                    <Skeleton className="h-3 w-3/5 mx-auto" />
-                                    <Skeleton className="h-3 w-2/5 mx-auto" />
-                                </div>
+                        {/* Image area: w-[640px] & aspect-[100/71] 与正式版一致 */}
+                        <figure className="mb-6 w-[640px] max-w-full aspect-[100/71] rounded-xl" >
+                            <div className="relative h-full w-full overflow-hidden rounded-xl">
+                                <Skeleton className="absolute inset-0 rounded-xl" />
                             </div>
-                        </aside>
+                        </figure>
+
+                        {/* Overview markdown 若干段落 */}
+                        <div className="space-y-4">
+                            <Skeleton className="h-6 w-11/12 rounded-md" />
+                            <Skeleton className="h-6 w-10/12 rounded-md" />
+                            <Skeleton className="h-6 w-9/12 rounded-md" />
+                        </div>
+
+
                     </div>
+
+                    {/* Sidebar */}
+                    <div>
+                        <div className="bg-sd-surface py-10 mt-15 ml-10 shadow-xs rounded-xl lg:w-72 xl:w-80 border-2">
+                            {/* 标题 */}
+                            <div className="mb-6 flex justify-center">
+                                <Skeleton className="h-4 w-28 rounded-md" />
+                            </div>
+
+                            {/* 三个选项：5 个实心块风格中的中间 3 块 */}
+                            <div className="space-y-3 mb-8 px-6">
+                                <Skeleton className="h-12 w-full rounded-xl" />
+                                <Skeleton className="h-12 w-full rounded-xl" />
+                                <Skeleton className="h-12 w-full rounded-xl" />
+                            </div>
+
+                            {/* CTA 按钮：底部第 5 块 */}
+                            <div className="flex justify-center px-6">
+                                <Skeleton className="h-10 w-40 rounded-lg" />
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-            </main>
-        </div>
-    </div>)
+            </div>
+        </main>
+    </div>
+    )
 }

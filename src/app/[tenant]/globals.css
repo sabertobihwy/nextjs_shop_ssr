@@ -260,3 +260,7 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* theme */
+:root[data-theme="cool"]    { --main-bg: #111827; --head-bg:  #1f2937;}
+:root[data-theme="general"] { --main-bg: #ffffff; --head-bg:  #f3f4f6; }

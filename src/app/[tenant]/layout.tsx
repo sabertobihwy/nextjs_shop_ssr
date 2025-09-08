@@ -74,7 +74,7 @@ export default async function RootLayout({
   //---
   return (
     <html lang="en"
-    // className={inter.className}
+      data-theme={themeName}
     >
       <head>
         {/* 全局加载 Turnstile 脚本，但 onload callback 由页面控制 */}
