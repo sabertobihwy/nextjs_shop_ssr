@@ -3,9 +3,10 @@ import { TenantPublic, toTenantPublic } from '@/types/entities/Tenant'
 
 // for BFF server service
 export async function getTenantByName(name: string) {
-    return prisma.tenants.findUnique({
+    const result = prisma.tenants.findUnique({
         where: { name }
     })
+    return result
 }
 // deprecated 
 export async function getTenantByNamePublic(name: string): Promise<TenantPublic | null> {

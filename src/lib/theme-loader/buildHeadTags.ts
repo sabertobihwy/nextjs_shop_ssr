@@ -9,6 +9,23 @@ export type LinkTag =
     | { tag: 'link'; rel: 'preconnect'; href: string; crossOrigin?: 'anonymous' }
     | { tag: 'meta'; name: string; content: string };
 
+type SceneRule =
+    | string[] // 仅给“后缀”，比如 ['header','main','detail']
+    | ((ctx: { scene: string; themeName: string; theme: Record<string, string> }) => string[]); // 直接返回完整 key
+
+// 入口路由表：按需要增删
+const SCENE_ENTRIES: Record<string, SceneRule> = {
+    // shop：三个入口
+    shop: ['header', 'main', 'detail'],
+
+    // landing：命名是 index（如果你真的是不带 themeName 的全名，也可以在这里直接返回完整 key）
+    landing: ({ scene, themeName }) => [`${themeName}-${scene}-index`],
+
+    // 其他未显式配置的场景走默认：header + main
+    default: ['header', 'main'],
+};
+
+
 export function buildHeadTags(opts: {
     cdnBase: string,
     cdnUrl: CdnFn;
@@ -53,10 +70,13 @@ export function buildHeadTags(opts: {
 
     // 4) 场景入口
     const entriesFor = (scene: string): string[] => {
-        const base = [`${themeName}-${scene}-header`, `${themeName}-${scene}-main`];
-        const keys = scene === "shop"
-            ? [...base, `${themeName}-${scene}-detail`]
-            : base;
+        const rule = SCENE_ENTRIES[scene] ?? SCENE_ENTRIES.default;
+
+        const keys =
+            typeof rule === 'function'
+                ? rule({ scene, themeName, theme })
+                : rule.map(part => `${themeName}-${scene}-${part}`)
+
         return keys.map(k => theme[k as keyof typeof theme]).filter(Boolean).map(cdnUrl);
     };
 

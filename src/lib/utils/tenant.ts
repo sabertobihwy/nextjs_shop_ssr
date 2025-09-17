@@ -15,7 +15,7 @@
 // }
 
 // ✅ 你可以换成从 Redis、数据库缓存中动态生成
-export const VALID_TENANTS = ['Nike', 'Pepsi', 'adidas', 'shopstack'];
+export const VALID_TENANTS = ['Nike', 'Pepsi', 'Apple', 'shopstack'];
 
 export function isValidTenant(tenant: string): boolean {
     return VALID_TENANTS.includes(tenant);

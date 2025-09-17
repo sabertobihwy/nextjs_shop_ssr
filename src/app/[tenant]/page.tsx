@@ -1,3 +1,5 @@
+import { proLandingMockData } from "@/constants/TestMockLadingData";
+import LandingController from "./LandingController";
 
 
 export default async function Page() {
@@ -6,8 +8,8 @@ export default async function Page() {
 
     // tenantId -> get themeOptions 
 
-    
 
-    return null
+
+    return <LandingController data={proLandingMockData} />
 
 }

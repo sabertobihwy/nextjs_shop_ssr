@@ -1,17 +1,17 @@
 import "./globals.css";
 import type { ReactNode } from 'react';
 import { Metadata } from "next";
-import Script from 'next/script'
+// import Script from 'next/script'
 import { ThemeOptionsEntity } from "@/types/entities/Theme";
 import { RootHeader } from "@/components/RootHeader";
 import { loadTenantOrRedirect } from "@/lib/ssr/loadTenantOrRedirect";
 import { loadThemeOrRedirect } from "@/lib/ssr/loadThemeOrRedirect";
 import { generateCdnUrl, getManifests } from "@/lib/theme-loader/getManifest";
 import { buildHeadTags } from "@/lib/theme-loader";
-import { ReactBridge } from "@/lib/theme-loader/utils/ReactBridge";
 import { CDN_BASE, CDN_VER } from "@/constants/theme";
 import Providers from "@/components/provider/ReduxProvider";
 import { ReactQueryProvider } from "@/components/provider/ReactQueryProvider";
+import { RuntimeBootstrap } from "@/lib/theme-loader/utils/RuntimeBootstrap";
 // import { Inter } from 'next/font/google'
 
 // const inter = Inter({
@@ -50,7 +50,7 @@ export default async function RootLayout({
   // ---
   const themeName = themeOptions.themeName
   const scenes = Object.keys(themeOptions.pageInstanceMap)
-  const current = /* 当前路由对应场景 */      'shop'; // 应该是landing
+  const current = /* 当前路由对应场景 */      'landing';
   const version = CDN_VER;
   const cdnBase = CDN_BASE;
 
@@ -78,10 +78,10 @@ export default async function RootLayout({
     >
       <head>
         {/* 全局加载 Turnstile 脚本，但 onload callback 由页面控制 */}
-        <Script
+        {/* <Script
           src="https://challenges.cloudflare.com/turnstile/v0/api.js"
           strategy="afterInteractive" // after client hydration 
-        />
+        /> */}
         {/* Import Map */}
         <script type="importmap-shim"
           dangerouslySetInnerHTML={{ __html: importMapJson }}
@@ -107,14 +107,12 @@ export default async function RootLayout({
         })}
       </head>
       <body>
-        <ReactBridge />
         <Providers tenantName={tenantName} tenantId={tenantId} themeOptions={themeOptions} themeCdnMap={themeCdnMap}>
+          <RuntimeBootstrap themeName={themeName} />
           <ReactQueryProvider>
-            <div className="flex h-[100dvh] overflow-hidden">
-              <div className="relative flex flex-col flex-1 overflow-x-hidden">
-                <RootHeader />
-                {children}
-              </div>
+            <div className="flex min-h-screen flex-col [--root-header-h:theme(spacing.12)]">
+              <RootHeader />
+              {children}
             </div>
           </ReactQueryProvider>
         </Providers>

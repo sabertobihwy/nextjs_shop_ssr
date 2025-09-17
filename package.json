@@ -13,6 +13,9 @@
     "build:ports": "node scripts/port.mjs useLink useImage "
   },
   "dependencies": {
+    "alpinejs": "^3.15.0",
+    "aos": "^2.3.4",
+    "@alpinejs/focus": "^3.15.0",
     "@hookform/resolvers": "^5.1.1",
     "@neondatabase/serverless": "^1.0.1",
     "@prisma/client": "^6.10.1",
@@ -46,6 +49,9 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
+    "@types/alpinejs": "^3.13.11",
+    "@types/alpinejs__focus": "^3.13.4",
+    "@types/aos": "^3.0.7",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@tanstack/react-query-devtools": "^5.85.5",

@@ -20,8 +20,17 @@ export default function ShopHeaderClient({ user, tenantName, children }: Props) 
     return (
         <>
             <SilentTokenRefresher tenantName={tenantName} />
-            <HeaderRemoteContainer url={url} user={user} />
-            {children}
+            <div className="flex-1 min-h-0">
+                <div className="flex flex-col flex-1 min-h-0">
+                    <div className="sticky top-[var(--root-header-h)] z-40 shrink-0" >
+                        <HeaderRemoteContainer url={url} user={user} />
+                    </div>
+                    <main data-scroll-root className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
+                        {children}
+                    </main>
+                </div>
+            </div>
+
         </>
     )
 }

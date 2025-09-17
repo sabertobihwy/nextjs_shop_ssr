@@ -9,7 +9,7 @@ import { useTheme } from "@/redux/hooks/useTheme"
 export function RootHeader() {
     const { themeName, sceneList } = useTheme()
     return (
-        <div className="h-12 border-gray-200 border-b bg-white">
+        <div className="sticky top-0 z-50 h-[var(--root-header-h)] border-gray-200 border-b bg-white">
             <div className="containerContent flex items-center justify-between h-full">
                 <h1 className="h-12 text-xl font-bold hover:cursor-pointer">
                     <TenantLink href={'/'}>{themeName}</TenantLink>
