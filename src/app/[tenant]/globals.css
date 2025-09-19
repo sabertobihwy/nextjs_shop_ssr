@@ -264,3 +264,4 @@ body {
 /* theme */
 :root[data-theme="cool"]    { --main-bg: #111827; --head-bg:  #1f2937;}
 :root[data-theme="general"] { --main-bg: #ffffff; --head-bg:  #f3f4f6; }
+:root[data-theme="pro"]    { --main-bg: oklch(0.13 0.028 261.692);; --head-bg:  #1f2937;}

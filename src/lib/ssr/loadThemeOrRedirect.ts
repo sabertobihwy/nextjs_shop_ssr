@@ -6,6 +6,7 @@ export async function loadThemeOrRedirect(tenantName: string, tenantId: string):
     const themeOptsRsp = await fetch(`${process.env.NEXT_BASE_URL}/api/${tenantName}/theme?tenantId=${tenantId}`, {
         next: {
             revalidate: 3600
+            //revalidate: 0
         }
     })
     const themeOpts = (await assertApiSuccess<ThemeOptionsEntity>(themeOptsRsp))!

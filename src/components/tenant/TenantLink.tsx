@@ -17,9 +17,17 @@ export default function TenantLink({
 
     if (!tenantName) return null
 
-    const normalizedHref = typeof href === 'string'
-        ? `/${tenantName}${href.startsWith('/') ? href : `/${href}`}`
-        : href // 不处理 URL 对象
+    let normalizedHref: typeof href;
 
+    if (typeof href === 'string') {
+        // 特判 landing
+        if (href === 'landing' || href === '/landing') {
+            normalizedHref = `/${tenantName}/`;
+        } else {
+            normalizedHref = `/${tenantName}${href.startsWith('/') ? href : `/${href}`}`;
+        }
+    } else {
+        normalizedHref = href; // 不处理 URL 对象
+    }
     return <Link href={normalizedHref} {...props} />
 }

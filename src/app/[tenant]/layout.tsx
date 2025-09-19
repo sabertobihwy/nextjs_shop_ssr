@@ -50,6 +50,7 @@ export default async function RootLayout({
   // ---
   const themeName = themeOptions.themeName
   const scenes = Object.keys(themeOptions.pageInstanceMap)
+  console.log('[scenes:] ' + scenes)
   const current = /* 当前路由对应场景 */      'landing';
   const version = CDN_VER;
   const cdnBase = CDN_BASE;
