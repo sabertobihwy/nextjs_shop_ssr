@@ -15,7 +15,7 @@ import {
     FormMessage
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import TenantLink from '@/components/tenant/TenantLink'
+import TenantLink from '@/components/tenant/SmartNavLink'
 import { useTenantRouter } from '@/router/useTenantRouter'
 import { useTenant } from '@/redux/hooks/useTenant'
 import Turnstile from './Turnstile'

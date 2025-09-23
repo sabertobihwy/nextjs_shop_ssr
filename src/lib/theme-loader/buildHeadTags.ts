@@ -21,6 +21,8 @@ const SCENE_ENTRIES: Record<string, SceneRule> = {
     // landing：命名是 index（如果你真的是不带 themeName 的全名，也可以在这里直接返回完整 key）
     landing: ({ scene, themeName }) => [`${themeName}-${scene}-index`],
 
+    about: ['index'],
+
     // 其他未显式配置的场景走默认：header + main
     default: ['header', 'main'],
 };

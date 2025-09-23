@@ -1,6 +1,6 @@
 "use client"
 
-import TenantLink from "./tenant/TenantLink"
+import TenantLink from "./tenant/SmartNavLink"
 import { ShoppingCart } from 'lucide-react';
 import { useCart } from "@/redux/hooks/useCart";
 

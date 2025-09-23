@@ -26,3 +26,7 @@ export function extractTenantFromPath(pathname: string): string | null {
     const match = pathname.match(/^\/([^\/?#]+)/);
     return match ? match[1] : null;
 }
+export function tenantHref(tenant: string, href: string) {
+    if (href === '/' || href === '/landing') return `/${tenant}/`
+    return `/${tenant}${href.startsWith('/') ? href : `/${href}`}`
+}

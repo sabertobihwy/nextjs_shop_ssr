@@ -6,12 +6,13 @@ import CustomCartLink from '@/components/CustomCartLink';
 export type HeaderLinkItem = {
     href: string,
     name: string,
+    tenantName: string,
     icon?: ReactNode,
     className?: string,
     render?: ReactElement<{ href: string; name: string }>; // 若存在，则跳过默认渲染
 };
 export const HEADERLINK: HeaderLinkItem[] = [
-    { href: ('/search'), name: 'Search', icon: <Search /> },
-    { href: ('/account'), name: 'Account', icon: <CircleUserRound /> },
-    { href: ('/cart'), name: 'Cart', render: <CustomCartLink href={'/cart'} name="Cart" /> },
+    { href: ('/search'), tenantName: "", name: 'Search', icon: <Search /> },
+    { href: ('/account'), tenantName: "", name: 'Account', icon: <CircleUserRound /> },
+    { href: ('/cart'), tenantName: "", name: 'Cart', render: <CustomCartLink href={'/cart'} name="Cart" /> },
 ]

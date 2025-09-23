@@ -112,7 +112,7 @@ export default async function RootLayout({
           <RuntimeBootstrap themeName={themeName} />
           <ReactQueryProvider>
             <div className="flex min-h-screen flex-col [--root-header-h:theme(spacing.12)]">
-              <RootHeader />
+              <RootHeader tenantName={tenantName} sceneList={scenes} themeName={themeName} />
               {children}
             </div>
           </ReactQueryProvider>

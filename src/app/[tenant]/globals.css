@@ -8,6 +8,7 @@
     @apply mx-auto w-2/3 px-10;
   }
 }
+@layer base { html { @apply [scrollbar-gutter:stable]; } }   /* 即便现在没滚动条，也先把那 15px 空位占上”。这样有/无滚动条时的可用宽度一致 */
 
 /* 
 :root {
@@ -264,4 +265,4 @@ body {
 /* theme */
 :root[data-theme="cool"]    { --main-bg: #111827; --head-bg:  #1f2937;}
 :root[data-theme="general"] { --main-bg: #ffffff; --head-bg:  #f3f4f6; }
-:root[data-theme="pro"]    { --main-bg: oklch(0.13 0.028 261.692);; --head-bg:  #1f2937;}
+:root[data-theme="pro"]    { --main-bg: oklch(0.13 0.028 261.692); --head-bg:  #1f2937;}
