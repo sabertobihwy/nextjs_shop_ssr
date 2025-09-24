@@ -1,13 +1,31 @@
 import { buildImportMap } from "./buildImportMap";
 import { CdnFn, ThemeManifest, VendorManifestV2 } from "./getManifest";
+import { cssFontMap } from "./utils/templateDependencies";
 
+type Cross = 'anonymous' | 'use-credentials';
+type FetchPriority = 'high' | 'low' | 'auto';
 /** 结构化的 head 标签描述，便于在 React/Next 中直接渲染为 <link> / <meta> 等 */
 export type LinkTag =
-    | { tag: 'link'; rel: 'modulepreload'; href: string; crossOrigin?: 'anonymous' | 'use-credentials'; fetchPriority?: 'high' | 'low' | 'auto'; as?: 'script' }
-    | { tag: 'link'; rel: 'prefetch'; href: string; crossOrigin?: 'anonymous' | 'use-credentials'; as?: 'script' }
-    | { tag: 'link'; rel: 'stylesheet'; href: string; fetchPriority?: 'high' | 'low' | 'auto' }
+    | { tag: 'link'; rel: 'modulepreload'; href: string; crossOrigin?: Cross; fetchPriority?: FetchPriority; as?: 'script' }
+    | { tag: 'link'; rel: 'prefetch'; href: string; crossOrigin?: Cross; as?: 'script' }
+    | { tag: 'link'; rel: 'stylesheet'; href: string; fetchPriority?: FetchPriority; media?: string; onload?: string }
     | { tag: 'link'; rel: 'preconnect'; href: string; crossOrigin?: 'anonymous' }
-    | { tag: 'meta'; name: string; content: string };
+    | { tag: 'meta'; name: string; content: string }
+    | {
+        tag: 'link';
+        rel: 'preload';
+        as: 'style';
+        href: string;
+        fetchPriority?: FetchPriority;
+    }
+    | {
+        tag: 'link';
+        rel: 'preload';
+        as: 'font';
+        href: string;
+        type?: string;            // e.g. 'font/woff2'
+        crossOrigin?: Cross;      // 建议 'anonymous'
+    };
 
 type SceneRule =
     | string[] // 仅给“后缀”，比如 ['header','main','detail']
@@ -65,9 +83,27 @@ export function buildHeadTags(opts: {
     // 如果你确知本页不做 hydration 但会立刻用到 react，可按需追加 prefetch 或低优先级 modulepreload
 
     // 3) 主题 CSS：首屏直接生效（不重复 preload）
+    const cssFontPreset = cssFontMap[themeName];
     const cssKey = Object.keys(theme).find(k => k.endsWith('style') || k.endsWith('-style'));
     if (cssKey) {
         links.push({ tag: 'link', rel: 'stylesheet', href: cdnUrl(theme[cssKey]), fetchPriority: cssFetchPriority });
+    }
+    if (cssFontPreset) {
+        // 1) preconnect
+        (cssFontPreset.preconnect ?? []).forEach((u) => {
+            links.push({ tag: 'link', rel: 'preconnect', href: u, crossOrigin: u.includes('gstatic') ? 'anonymous' : undefined });
+        });
+
+        // 2) （可选）预加载 woff2（只放首屏会用到的权重）
+        (cssFontPreset.preloadFonts ?? []).forEach((f) => {
+            links.push({ tag: 'link', rel: 'preload', as: 'font', type: f.type ?? 'font/woff2', href: f.href, crossOrigin: 'anonymous' });
+        });
+
+        // 3) 非阻塞加载字体 CSS（preload+media hack）
+        links.push(
+            { tag: 'link', rel: 'preload', as: 'style', href: cssFontPreset.cssHref },
+            { tag: 'link', rel: 'stylesheet', href: cssFontPreset.cssHref },
+        );
     }
 
     // 4) 场景入口
@@ -100,13 +136,6 @@ export function buildHeadTags(opts: {
             }
         }
     }
-
-    // 5) 字体与外链（按需）
-    links.push(
-        { tag: 'link', rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-        { tag: 'link', rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
-        { tag: 'link', rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap' }
-    );
 
     return { importMapJson, links };
 }
