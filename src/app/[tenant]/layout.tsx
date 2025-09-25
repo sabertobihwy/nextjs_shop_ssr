@@ -30,7 +30,7 @@ export async function generateMetadata({
     title: tenantName + " - SceneStack",
     description: "landing",
     icons: {
-      icon: `/icons/${tenantName}/favicon.ico`, // public/nike/favicon.ico 等路径下
+      icon: `/icons/${tenantName}.ico`, // public/nike/favicon.ico 等路径下
     },
   };
 }

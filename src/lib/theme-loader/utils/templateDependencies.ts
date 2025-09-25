@@ -1,6 +1,4 @@
 import { AosOptions } from "aos"
-
-// constants/templateDependencies.ts
 type Deps = {
     alpine?: { focus?: boolean } | true
     aos?: Partial<AosOptions> | true
@@ -28,7 +26,13 @@ export const cssFontMap: Record<string, FontPreset> = {
     },
 
     general: {
-        id: 'font-poppins',
+        id: 'font-inter',
+        cssHref:
+            'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap',
+        preconnect: preconnectCSSArr
+    },
+    cool: {
+        id: 'font-inter',
         cssHref:
             'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap',
         preconnect: preconnectCSSArr
