@@ -59,7 +59,7 @@ export function buildImportMap(vendor: VendorManifestV2, cdnUrl: CdnFn, opts?: {
         'react': reactProxy,
         'react/jsx-runtime': jsxProxy,
         'react-redux': reduxProxy,
-        '@ss/useCart': "/externals/useCart.mjs", // todo
+        '@ss/useCart': "/externals/useCart.mjs", // todo 因为useCart是给远程组件用的,不用本地编译的时候考虑
         '@ss/services': '/externals/services.mjs',
     };
 

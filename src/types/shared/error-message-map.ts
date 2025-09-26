@@ -42,6 +42,10 @@ export const errorMessageMap: Record<ErrorCode, string> = {
     [ErrorCode.IP_EXCEED_LIMIT]: "IP_EXCEED_LIMIT",
     [ErrorCode.DATABASE_ERROR]: "DATABASE_ERROR",
     [ErrorCode.Turnstile_TOKEN_MISSING]: "Turnstile_TOKEN_MISSING",
-    [ErrorCode.THEME_NOT_FOUND]: ""
+    [ErrorCode.THEME_NOT_FOUND]: "",
+    [ErrorCode.PRODUCT_CATEGORY_TOPID_NOT_FOUND]: "",
+    [ErrorCode.PAGEINSTANCE_NOT_FOUND]: "",
+    [ErrorCode.SECTIONINSTANCE_ID_NOT_FOUND]: "",
+    [ErrorCode.SECTIONINSTANCE_NOT_FOUND]: ""
 }
 

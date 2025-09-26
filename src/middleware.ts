@@ -14,7 +14,8 @@ export function middleware(request: NextRequest) {
         pathname.startsWith('/api') ||
         pathname.startsWith('/_next') ||
         pathname.startsWith('/static') ||
-        pathname.startsWith('/not-found' || pathname.includes('.'))
+        pathname.startsWith('/not-found') ||
+        /\.[^/]+$/.test(pathname) // 任何带扩展名的静态文件，如 .png/.css/.js/...
     ) {
         return NextResponse.next();
     }
