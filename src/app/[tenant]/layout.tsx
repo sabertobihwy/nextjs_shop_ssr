@@ -59,7 +59,7 @@ export default async function RootLayout({
 
   const { vendor, theme: themeCdnMap } = await getManifests(themeName, version, cdnUrl);
 
-  const { importMapJson, links } = buildHeadTags({
+  const { importMapJson, links } = await buildHeadTags({
     cdnBase,
     cdnUrl,
     themeName,

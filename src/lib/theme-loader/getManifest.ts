@@ -1,5 +1,5 @@
-import fs from 'node:fs';
-import { createRequire } from 'node:module';
+// import fs from 'node:fs';
+// import { createRequire } from 'node:module';
 
 export type Versions = {
     ['react']?: string;
@@ -62,10 +62,13 @@ export async function getManifests(themeName: string, version: string, cdnUrl: C
 }
 
 /** Read local host app's installed versions of react/react-dom/jsx-runtime */
-export function getLocalReactVersions(): Required<Pick<Versions, 'react' | 'react-dom' | 'react/jsx-runtime'>> {
-    const require = createRequire(import.meta.url);
+export async function getLocalReactVersions(): Promise<Required<Pick<Versions, 'react' | 'react-dom' | 'react/jsx-runtime'>>> {
+    const { createRequire } = await import('node:module');
+    const fs = await import('node:fs');
+
+    const requireFromHere = createRequire(import.meta.url);
     function readVersion(pkg: string) {
-        const p = require.resolve(`${pkg}/package.json`, { paths: [process.cwd()] });
+        const p = requireFromHere.resolve(`${pkg}/package.json`, { paths: [process.cwd()] });
         return JSON.parse(fs.readFileSync(p, 'utf-8')).version as string;
     }
     const react = readVersion('react');

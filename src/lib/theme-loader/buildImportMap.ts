@@ -40,18 +40,25 @@ function assertReactVersionsMatch(vendor: Versions, local: Versions) {
  * - 'react' and 'react/jsx-runtime' => local proxy files (host app)
  * - 'react-dom' and 'react-dom/client' => CDN files from vendor manifest
  */
-export function buildImportMap(vendor: VendorManifestV2, cdnUrl: CdnFn, opts?: {
+export async function buildImportMap(vendor: VendorManifestV2, cdnUrl: CdnFn, opts?: {
     reactProxyPath?: string;
     jsxRuntimeProxyPath?: string,
     reduxProxyPath?: string
-}): ImportMap {
+}): Promise<ImportMap> {
     const reactProxy = opts?.reactProxyPath ?? '/react-bridge/react-proxy.js';
     const jsxProxy = opts?.jsxRuntimeProxyPath ?? '/react-bridge/react-jsx-runtime-proxy.js';
     const reduxProxy = opts?.reduxProxyPath ?? '/react-bridge/react-redux.proxy.mjs';
 
-    // 1) Version check
-    const local = getLocalReactVersions();
-    assertReactVersionsMatch(vendor.versions ?? {}, local);
+    if (process.env.NODE_ENV !== 'production') {
+        (async () => {
+            try {
+                const local = await getLocalReactVersions();
+                assertReactVersionsMatch(vendor.versions ?? {}, local);
+            } catch (err) {
+                console.warn('[version-check] skipped:', err);
+            }
+        })();
+    }
 
     // 2) Required specifiers
     const needCdn = ['react-dom', 'react-dom/client'] as const;

@@ -46,7 +46,7 @@ const SCENE_ENTRIES: Record<string, SceneRule> = {
 };
 
 
-export function buildHeadTags(opts: {
+export async function buildHeadTags(opts: {
     cdnBase: string,
     cdnUrl: CdnFn;
     themeName: string;               // e.g. "cool"
@@ -56,7 +56,7 @@ export function buildHeadTags(opts: {
     currentScene?: string;           // 当前页面/路由对应的场景
     cssFetchPriority?: 'high' | 'auto' | 'low';
     strategy?: 'conservative' | 'aggressive'; // 其他场景预取强度
-}): { importMapJson: string; links: LinkTag[] } {
+}): Promise<{ importMapJson: string; links: LinkTag[] }> {
     const {
         cdnBase, cdnUrl, vendor, theme, scenes,
         themeName, currentScene,
@@ -65,7 +65,7 @@ export function buildHeadTags(opts: {
     } = opts;
 
     // 1) importmap（先注入到 <head>）
-    const importMap = buildImportMap(vendor, cdnUrl);
+    const importMap = await buildImportMap(vendor, cdnUrl);
     // 防止 </script> 截断与 XSS：转义 '<'
     const importMapJson = JSON.stringify(importMap).replace(/</g, '\\u003c');
 
